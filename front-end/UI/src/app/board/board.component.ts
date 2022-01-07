@@ -58,7 +58,8 @@ export class BoardComponent implements OnInit {
    */
   add(string:string){
     var shape;
-    var text;
+    var text1;
+    var text2;
     var color;
     //if M
     if(string == 'M'){
@@ -71,7 +72,7 @@ export class BoardComponent implements OnInit {
         radius:50,
         fill:'green',
       });
-      text = new Konva.Text({
+      text1 = new Konva.Text({
           offset:{x:shape.getAttr('radius')/8,
                   y:shape.getAttr('radius')/8
           },
@@ -82,6 +83,17 @@ export class BoardComponent implements OnInit {
         fontSize:20,
         text:'M'+this.numOfMs.toString()
       });
+      text2 = new Konva.Text({
+        offset:{x:shape.getAttr('radius'),
+                y:shape.getAttr('radius')
+        },
+      x:shape.getAttr('x'),
+      y:shape.getAttr('y'),
+      fill:'black',
+      fontFamily:'Consolas',
+      fontSize:20,
+      text: '0'
+    });
     }
     //if Q
     else{
@@ -100,7 +112,7 @@ export class BoardComponent implements OnInit {
                 y:shape.getAttr('height')/2
         }
       })
-      text = new Konva.Text({
+      text1 = new Konva.Text({
           offset:{x:shape.getAttr('offsetX')/4,
                   y:shape.getAttr('offsetY')/4
           },
@@ -111,11 +123,22 @@ export class BoardComponent implements OnInit {
         fontSize:20,
         text:'Q'+this.numOfQs.toString()
       });
+      text2 = new Konva.Text({
+        offset:{x:shape.getAttr('offsetX')*1.5,
+                y:shape.getAttr('offsetY')*1.5
+        },
+      x:shape.getAttr('x'),
+      y:shape.getAttr('y'),
+      fill:'black',
+      fontFamily:'Consolas',
+      fontSize:20,
+      text: '0'
+    });
     }
     var FrontArrows: any[] = [];
     var BackArrows: any[] = [];
 
-    var SwithT = new ShapeWithText(shape,text,BackArrows,FrontArrows,color);
+    var SwithT = new ShapeWithText(shape,text1,text2,BackArrows,FrontArrows,color,0);
     this.shapes.push(SwithT);
     this.layer.add(SwithT.getShapeWithText())
   }
@@ -162,6 +185,8 @@ export class BoardComponent implements OnInit {
           x[0].addFollowerOut(arrow);
           y[0].addFollowerIn(arrow);
           x[0].playFlashAnimation();
+          var num = x[0].getProductsNumber()
+          x[0].updateProductsNumber(num+1);
           y[0].playColorAnimation('red');
 
           component.layer.add(arrow.getArrow());//add arrow to the layer to display

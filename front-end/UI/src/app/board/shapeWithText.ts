@@ -2,9 +2,11 @@ import Konva from 'konva'
 import { delay } from 'rxjs';
 export class ShapeWithText{
   shape!:Konva.Shape;
-  text!:Konva.Text;
+  text1!:Konva.Text;
+  text2!:Konva.Text;
   Group!:Konva.Group;
   animator!:Konva.Tween;
+  Products!:number;
   Color!:string;
   InArrows: any[] = [];
   OutArrows: any[] = [];
@@ -17,30 +19,50 @@ export class ShapeWithText{
    * @param OutArrows Arrows pointing out of theshape
    * @param Color Original Color of the shape
    */
-  constructor(shape:Konva.Shape, text:Konva.Text, InArrows:any[],OutArrows:any[],Color:string){
+  constructor(shape:Konva.Shape,
+              text1:Konva.Text,
+              text2:Konva.Text,
+              InArrows:any[],
+              OutArrows:any[],
+              Color:string,
+              Products:number)
+    {
     this.shape = shape
-    this.text = text
+    this.text1 = text1
+    this.text2 = text2
     this.InArrows = InArrows;
     this.OutArrows = OutArrows;
     this.Color = Color;
-
+    this.Products = Products;
     this.Group = new Konva.Group({
       draggable: true,
       offsetX:this.shape.x(),
       offsetY:this.shape.y()
     });
     this.Group.add(this.shape);
-    this.Group.add(this.text);
+    this.Group.add(this.text1);
+    this.Group.add(this.text2);
   }
 
   getShapeWithText(){return this.Group;}
   getShape(){return this.shape}
+  getProductsNumber(){return this.Products;}
   addFollowerIn(arrow:any){
     this.InArrows.push(arrow);
   }
   addFollowerOut(arrow:any){
     this.OutArrows.push(arrow);
   }
+  updateProductsNumber(t:number){
+    this.Products = t;
+    this.text2.setAttrs({text:this.Products.toString()});
+  }
+  /******************Animation Functions*************************************** */
+  /**
+   *
+   * @param ms milliseconds
+   * @returns
+   */
   private sleep(ms:any){
     return new Promise(
       resolve => setTimeout(resolve, ms)
