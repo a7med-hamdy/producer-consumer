@@ -15,7 +15,7 @@ public class waitingList implements vertex,Runnable{
         this.machine=machine;
         this.t.start();
     }
-
+    
     public void update(Boolean flage){
         this.flage=flage;
     }
@@ -32,6 +32,7 @@ public class waitingList implements vertex,Runnable{
     }
     public void show(){
         System.out.println(this.list);
+  
     }
 
 }
