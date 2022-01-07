@@ -26,6 +26,14 @@ export class BoardComponent implements OnInit {
     this.layer = new Konva.Layer();//create layer on start
     this.stage.add(this.layer);//add the layer to the stage on start
   }
+  clearAll(){
+    this.shapes = [];
+    this.pointers = [];
+    this.layer.destroyChildren();
+    this.numOfQs = 0;
+    this.numOfMs = 0;
+    console.log(this.layer.getChildren());
+  }
   getShapeWithTextFromArray(criteria:any){
     var x = this.shapes.filter(function(element){
       return element.getShapeWithText() == criteria;
