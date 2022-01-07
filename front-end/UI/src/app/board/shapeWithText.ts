@@ -1,25 +1,29 @@
 import Konva from 'konva'
+import { delay } from 'rxjs';
 export class ShapeWithText{
   shape!:Konva.Shape;
   text!:Konva.Text;
   Group!:Konva.Group;
   animator!:Konva.Tween;
-  BackArrows: any[] = [];
-  FrontArrows: any[] = [];
+  Color!:string;
+  InArrows: any[] = [];
+  OutArrows: any[] = [];
 
-  constructor(shape:Konva.Shape, text:Konva.Text, BackArrows:any[],FrontArrows:any[]){
+  /**
+   *
+   * @param shape shape Rectangle or Circle
+   * @param text  Text to be put on the Rectangle
+   * @param InArrows Arrows pointing towards the shape
+   * @param OutArrows Arrows pointing out of theshape
+   * @param Color Original Color of the shape
+   */
+  constructor(shape:Konva.Shape, text:Konva.Text, InArrows:any[],OutArrows:any[],Color:string){
     this.shape = shape
     this.text = text
-    this.BackArrows = BackArrows;
-    this.FrontArrows = FrontArrows;
-    var component = this;
-    this.animator = new Konva.Tween({
-      node: component.shape,
-      duration: 0.5,
-      easing: Konva.Easings.EaseInOut,
-      onFinish:() => this.animator.reverse(),
-      fill: 'rgb(0, 5, 0)',
-    });
+    this.InArrows = InArrows;
+    this.OutArrows = OutArrows;
+    this.Color = Color;
+
     this.Group = new Konva.Group({
       draggable: true,
       offsetX:this.shape.x(),
@@ -31,17 +35,42 @@ export class ShapeWithText{
 
   getShapeWithText(){return this.Group;}
   getShape(){return this.shape}
-  addFollowerToFront(arrow:any){
-    this.FrontArrows.push(arrow);
+  addFollowerIn(arrow:any){
+    this.InArrows.push(arrow);
   }
-  addFollowerToBack(arrow:any){
-    this.BackArrows.push(arrow);
+  addFollowerOut(arrow:any){
+    this.OutArrows.push(arrow);
   }
-  playAnimation(){
+  private sleep(ms:any){
+    return new Promise(
+      resolve => setTimeout(resolve, ms)
+    );
+  }
+  async playFlashAnimation(){
+    this.animator = new Konva.Tween({
+      node: this.shape,
+      duration: 0.3,
+      easing: Konva.Easings.BackEaseInOut,
+      fill: 'rgb(255, 255, 255)',
+    });
+    var component = this
+    for(var i = 0; i < 3;i++){
+      this.animator.play()
+      await this.sleep(300);
+      this.animator.reverse();
+      await this.sleep(300);
+    }
+  }
+  playColorAnimation(color:string){
+    this.animator = new Konva.Tween({
+      node: this.shape,
+      duration: 0.3,
+      easing: Konva.Easings.BackEaseInOut,
+      fill: color,
+    });
     this.animator.play();
-    var comp = this;
   }
-  playRevAnimation(){
-    this.animator.reverse();
+  playReverseColorAnimation(){
+    this.playColorAnimation(this.Color);
   }
 }

@@ -26,6 +26,10 @@ export class BoardComponent implements OnInit {
     this.layer = new Konva.Layer();//create layer on start
     this.stage.add(this.layer);//add the layer to the stage on start
   }
+
+  /**
+   * clears all the board
+   */
   clearAll(){
     this.shapes = [];
     this.pointers = [];
@@ -34,21 +38,36 @@ export class BoardComponent implements OnInit {
     this.numOfMs = 0;
     console.log(this.layer.getChildren());
   }
+
+  /**
+   * filter shapes array according to which group
+   *
+   * @param criteria group to be filtered with
+   * @returns filtered array
+   */
   getShapeWithTextFromArray(criteria:any){
     var x = this.shapes.filter(function(element){
       return element.getShapeWithText() == criteria;
     });
     return x;
   }
+
+  /** Adds either M or Q to the board
+   *
+   * @param string M | Q
+   */
   add(string:string){
     var shape;
     var text;
+    var color;
+    //if M
     if(string == 'M'){
+      color = 'green'
       console.log("add Ms")
       this.numOfMs++
       shape = new Konva.Circle({
-        x:150,
-        y:150,
+        x:300,
+        y:300,
         radius:50,
         fill:'green',
       });
@@ -64,12 +83,14 @@ export class BoardComponent implements OnInit {
         text:'M'+this.numOfMs.toString()
       });
     }
+    //if Q
     else{
       this.numOfQs++
+      color = 'yellow'
       console.log("addQs")
       shape = new Konva.Rect({
-        x:150,
-        y:150,
+        x:300,
+        y:300,
         width:100,
         height:50,
         fill:'yellow',
@@ -94,13 +115,15 @@ export class BoardComponent implements OnInit {
     var FrontArrows: any[] = [];
     var BackArrows: any[] = [];
 
-    var SwithT = new ShapeWithText(shape,text,BackArrows,FrontArrows);
+    var SwithT = new ShapeWithText(shape,text,BackArrows,FrontArrows,color);
     this.shapes.push(SwithT);
     this.layer.add(SwithT.getShapeWithText())
   }
 
 
-
+  /**
+   * adds arrows between two shapes
+   */
   addArrow(){
     console.log("add Arrows!");
     var arrow;
@@ -111,12 +134,15 @@ export class BoardComponent implements OnInit {
     this.stage.on("click",function(e){
       clicks++;
       console.log(e.target)
+      //if the clicked shape is a konva shape
       if(e.target instanceof Konva.Shape){
         console.log("Hi")
+        //gets its source group
         if (clicks == 1){
           console.log("1stClick")
           source = e.target.getParent();
         }
+        //gets its destination group
         if(clicks == 2){
           console.log("2ndClick")
           destination = e.target.getParent();
@@ -124,20 +150,24 @@ export class BoardComponent implements OnInit {
       }
       if(clicks >= 2){
         console.log("Two clicks")
-        if(source != null && destination != null){
+        if(source != null && destination != null && source != destination){
           console.log("adding arrows!")
+          //create new arrow component
           arrow = new Arrow(source,destination);
           component.pointers.push(arrow);
+          //get the source and destination shapes
           var x = component.getShapeWithTextFromArray(source);
           var y = component.getShapeWithTextFromArray(destination);
-          x[0].addFollowerToFront(arrow);
-          y[0].addFollowerToBack(arrow);
-          x[0].playAnimation();
-          y[0].playRevAnimation();
-          component.layer.add(arrow.getArrow());
-          console.log(x[0].FrontArrows)
+          //add the arrow to the shapes's arrays
+          x[0].addFollowerOut(arrow);
+          y[0].addFollowerIn(arrow);
+          x[0].playFlashAnimation();
+          y[0].playColorAnimation('red');
 
-          console.log(y[0].BackArrows)
+          component.layer.add(arrow.getArrow());//add arrow to the layer to display
+          //console.log(x[0].FrontArrows)
+
+          //console.log(y[0].BackArrows)
         }
         component.stage.off('click');
       }
