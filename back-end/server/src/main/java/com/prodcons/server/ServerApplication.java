@@ -21,17 +21,13 @@ public class ServerApplication {
 		c.adding(fourthList);
 		waitingList firsList= new waitingList(c,new Thread(),"firsList");
 		waitingList secondList= new waitingList(c,new Thread(),"secondList");
-
+		c.addingB(firsList);
+        c.addingB(secondList);
 		for(int i=0;i<10;i++){
 			firsList.add();
 			secondList.add();
 		}
-		firsList.run();
-		secondList.run();
-
-
-		fourthList.show();
-	
+		
 	}
 
 }
