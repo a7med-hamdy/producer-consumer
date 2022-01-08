@@ -20,7 +20,7 @@ export class RequestsService {
       if(done)
         console.log("Queue added!!")
       else
-        console.log("Error! Queue wasn't added")
+        console.log("Error!! Queue wasn't added.")
     })
   }
 
@@ -31,20 +31,19 @@ export class RequestsService {
       if(done)
         console.log("Machine added!!")
       else
-        console.log("Error! Machine wasn't added")
+        console.log("Error!! Machine wasn't added.")
     })
   }
   
   // > Arrow < creation request
-  addArrow(fromType: string, fromNum: number,
-           toType: string,   toNum: number){
-    let info = `/(${fromType},${fromNum})/(${toType},${toNum})`
+  addArrow(from: string, to: string){
+    let info = `/${from}/${to}`
     this.http.post<any>(`${this.url}/+shm${info}`, {})
     .subscribe(done => {
       if(done)
         console.log("Arrow added!!")
       else
-        console.log("Error! Arrow wasn't added")
+        console.log("Error!! Arrow wasn't added.")
     })
   }
 }

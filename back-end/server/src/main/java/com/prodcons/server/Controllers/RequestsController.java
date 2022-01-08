@@ -39,13 +39,11 @@ public class RequestsController {
         return true;
     }
 
-    //for example: "/+shm/(M,1)/(Q,2)" adding an arrow from (M1) to (Q2)
-    @PostMapping("/+shm/({fromType},{fromNumber})/({toType},{toNumber})")
+    //for example: "/+shm/M1/Q2" adding an arrow from (M1) to (Q2)
+    @PostMapping("/+shm/{from}/{to}")
     public boolean addArrow(
-        @PathVariable("fromType") char fType,
-        @PathVariable("fromNumber") int fNumber,
-        @PathVariable("toType") char tType,
-        @PathVariable("toNumber") int tNumber)
+        @PathVariable("from") String from,
+        @PathVariable("to") String to)
     {
         try{
             //add the Arrow
