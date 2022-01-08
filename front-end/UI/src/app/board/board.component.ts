@@ -22,9 +22,9 @@ export class BoardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.webSocketAPI = new WebSocketAPI(new BoardComponent());
+    //this.webSocketAPI = new WebSocketAPI(new BoardComponent());
     //connect to backend at start
-    this.connect()
+    //this.connect()
     //create the stage on start
     this.stage = new Konva.Stage({
       container: 'container',
@@ -34,7 +34,7 @@ export class BoardComponent implements OnInit {
     this.layer = new Konva.Layer();//create layer on start
     this.stage.add(this.layer);//add the layer to the stage on start
   }
-
+/***************************************************************************************************************** */
   //methods for websocket
   connect(){
     this.webSocketAPI._connect();
@@ -53,6 +53,8 @@ export class BoardComponent implements OnInit {
     this.message = message;
   }
   //end of websocket
+/*************************************************************************************************************** */
+
 
   /**
    * clears all the board
@@ -79,6 +81,7 @@ export class BoardComponent implements OnInit {
     return x;
   }
 
+
   /** Adds either M or Q to the board
    *
    * @param string M | Q
@@ -92,8 +95,8 @@ export class BoardComponent implements OnInit {
     if(string == 'M'){
       color = 'green'
       console.log("add Ms")
-      this.numOfMs++
       shape = new Konva.Circle({
+        name: 'M'+this.numOfMs.toString(),
         x:300,
         y:300,
         radius:50,
@@ -110,24 +113,15 @@ export class BoardComponent implements OnInit {
         fontSize:20,
         text:'M'+this.numOfMs.toString()
       });
-      text2 = new Konva.Text({
-        offset:{x:shape.getAttr('radius'),
-                y:shape.getAttr('radius')
-        },
-      x:shape.getAttr('x'),
-      y:shape.getAttr('y'),
-      fill:'black',
-      fontFamily:'Consolas',
-      fontSize:20,
-      text: '0'
-    });
+      this.numOfMs++
+
     }
     //if Q
     else{
-      this.numOfQs++
       color = 'yellow'
       console.log("addQs")
       shape = new Konva.Rect({
+        name:'Q'+this.numOfQs.toString(),
         x:300,
         y:300,
         width:100,
@@ -161,6 +155,7 @@ export class BoardComponent implements OnInit {
       fontSize:20,
       text: '0'
     });
+    this.numOfQs++
     }
     var FrontArrows: any[] = [];
     var BackArrows: any[] = [];
@@ -202,20 +197,28 @@ export class BoardComponent implements OnInit {
         console.log("Two clicks")
         if(source != null && destination != null && source != destination){
           console.log("adding arrows!")
-          //create new arrow component
-          arrow = new Arrow(source,destination);
-          component.pointers.push(arrow);
+          arrow = new Arrow(source,destination);      //create new arrow component
           //get the source and destination shapes
           var x = component.getShapeWithTextFromArray(source);
           var y = component.getShapeWithTextFromArray(destination);
           //add the arrow to the shapes's arrays
+          if(x[0].getShape().name().includes('M')){
+            var followers = x[0].getFollowersOut();
+            var f = followers.filter(function(element:any){
+              return element.getDestination().name().includes('Q');
+            });
+            if(f.length != 0){
+              component.stage.off('click');
+              return
+            }
+          }
           x[0].addFollowerOut(arrow);
           y[0].addFollowerIn(arrow);
-          x[0].playFlashAnimation();
           var num = x[0].getProductsNumber()
           x[0].updateProductsNumber(num+1);
-          y[0].playColorAnimation('red');
 
+
+          component.pointers.push(arrow);
           component.layer.add(arrow.getArrow());//add arrow to the layer to display
           //console.log(x[0].FrontArrows)
 
