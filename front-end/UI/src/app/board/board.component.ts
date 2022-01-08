@@ -69,7 +69,7 @@ export class BoardComponent implements OnInit {
   }
 
   /**
-   * filter shapes array according to which group
+   * filter shapes array according to given element
    *
    * @param criteria group to be filtered with
    * @returns filtered array
@@ -77,6 +77,18 @@ export class BoardComponent implements OnInit {
   getShapeWithTextFromArray(criteria:any){
     var x = this.shapes.filter(function(element){
       return element.getShapeWithText() == criteria;
+    });
+    return x;
+  }
+  /**
+   * filter shapes array according to given name
+   *
+   * @param name name of the shape element
+   * @returns filtered array
+   */
+  getShapeWithTextFromArrayByName(name:string){
+    var x = this.shapes.filter(function(element){
+      return element.getShapeWithText().getShape().name() == name;
     });
     return x;
   }
