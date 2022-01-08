@@ -16,18 +16,30 @@ public class machine implements vertex, Runnable {
         this.t.start();
         this.queues = queues;
     }
+    public machine(){}
 
     private void process(String product) {
         try{
             Thread.sleep(time);
         }catch(Exception e){System.out.println(e);}
-        System.out.println(product);
+        System.out.println(this.name + " processed " + product);
     }
 
-    public void setAfter(waitingList w)
+    public int setAfter(waitingList w)
     {
-        this.after = w;
+        if(this.after == null && !w.name.equalsIgnoreCase("Q0"))
+        {
+            this.after = w;
+            return 0;
+        }
+        return -1;
     }
+
+    public void addQueue(waitingList w)
+    {
+        this.queues.add(w);
+    }
+
     @Override
     public void run() {
         while(true)
