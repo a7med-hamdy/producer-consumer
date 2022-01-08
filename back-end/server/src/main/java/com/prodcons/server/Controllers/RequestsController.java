@@ -54,4 +54,43 @@ public class RequestsController {
         }
         return true;
     }
+
+/**************************************************
+ * Simulation requests                            *
+ **************************************************/
+    @PostMapping("/play")
+    public boolean play(){
+        try{
+            //Let's play
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @PostMapping("/stop")
+    public boolean stop(){
+        try{
+            //Stop it :)
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @PostMapping("/replay/{simulationID}")
+    public boolean replay(@PathVariable int simulationID){
+        try{
+            //Replay this simulation
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
