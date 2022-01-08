@@ -16,13 +16,15 @@ public class ServerApplication {
 		machine c2= new machine();
 		machine c= new machine();
 		
-		waitingList lastlist= new waitingList(c2,new Thread(),"fourthList");
-		waitingList fourthList= new waitingList(c2,new Thread(),"fourthList");
+		waitingList lastlist= new waitingList(c2,"fourthList");
+		waitingList fourthList= new waitingList(c2,"fourthList");
 		c.adding(fourthList);
-		waitingList firsList= new waitingList(c,new Thread(),"firsList");
-		waitingList secondList= new waitingList(c,new Thread(),"secondList");
+		waitingList firsList= new waitingList(c,"firsList");
+		waitingList secondList= new waitingList(c,"secondList");
 		c.addingB(firsList);
 		c.addingB(secondList);
+		c2.addingB(firsList);
+		c2.addingB(secondList);
 		for(int i=0;i<10;i++){
 			firsList.add();
 			secondList.add();

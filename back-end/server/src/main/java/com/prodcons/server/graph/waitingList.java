@@ -10,7 +10,7 @@ public class waitingList implements vertex,Runnable{
     String label;
     Queue<String> list= new LinkedList<String>();
     Boolean flage=true;
-    public waitingList(machine machine, Thread thread,String label) {
+    public waitingList(machine machine, String label) {
         this.label=label;
         this.machine=machine;
         this.t.start();

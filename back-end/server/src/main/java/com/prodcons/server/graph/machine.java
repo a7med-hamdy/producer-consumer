@@ -14,6 +14,7 @@ public class machine implements vertex {
         this.befoList.add(after);
     }
     public void noter(Boolean z){
+        System.out.println(z);
         for(waitingList i : befoList){
             i.update(z);
         }
