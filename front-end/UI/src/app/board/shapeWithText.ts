@@ -21,7 +21,7 @@ export class ShapeWithText{
    */
   constructor(shape:Konva.Shape,
               text1:Konva.Text,
-              text2:Konva.Text,
+              text2:any = null,
               InArrows:any[],
               OutArrows:any[],
               Color:string,
@@ -35,18 +35,24 @@ export class ShapeWithText{
     this.Color = Color;
     this.Products = Products;
     this.Group = new Konva.Group({
+      name:this.shape.name(),
       draggable: true,
       offsetX:this.shape.x(),
       offsetY:this.shape.y()
     });
     this.Group.add(this.shape);
     this.Group.add(this.text1);
-    this.Group.add(this.text2);
+    if(this.text2 != null)
+      this.Group.add(this.text2);
   }
 
   getShapeWithText(){return this.Group;}
   getShape(){return this.shape}
   getProductsNumber(){return this.Products;}
+  getFollowersOut(){return this.OutArrows;}
+  getFollowersIn(){return this.InArrows;}
+
+
   addFollowerIn(arrow:any){
     this.InArrows.push(arrow);
   }
@@ -54,8 +60,10 @@ export class ShapeWithText{
     this.OutArrows.push(arrow);
   }
   updateProductsNumber(t:number){
-    this.Products = t;
-    this.text2.setAttrs({text:this.Products.toString()});
+    if(this.text2 != null){
+      this.Products = t;
+      this.text2.setAttrs({text:this.Products.toString()});
+    }
   }
   /******************Animation Functions*************************************** */
   /**

@@ -19,6 +19,8 @@
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
     "@stomp/ng2-stompjs": "^8.0.0",
+    "konva": "^8.3.2",
+    "ng2-konva": "^6.0.0",
     "rxjs": "~7.4.0",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.5.2",

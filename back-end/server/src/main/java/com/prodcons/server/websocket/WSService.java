@@ -21,8 +21,7 @@ public class WSService {
      */
     public void notifyFrontend(final String message){
 
-        //...some convertion can be done here, if any.
-
-        messagingTemplate.convertAndSend("/topic/changes", message); //send the message to all subscribers
+        //send the message to all subscribers
+        messagingTemplate.convertAndSend("/topic/board", message);
     }
 }
