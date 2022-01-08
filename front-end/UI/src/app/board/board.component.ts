@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import  Konva from 'konva';
+import { WebSocketAPI } from '../WebSocketAPI';
 import { ShapeWithText } from './shapeWithText'
 import { Arrow } from './arrow';
 @Component({
@@ -14,9 +15,16 @@ export class BoardComponent implements OnInit {
   layer!:Konva.Layer;
   numOfQs = 0;
   numOfMs = 0;
+
+  webSocketAPI!: WebSocketAPI;
+  message: any;
+  name: string = '';
   constructor() { }
 
   ngOnInit() {
+    this.webSocketAPI = new WebSocketAPI(new BoardComponent());
+    //connect to backend at start
+    this.connect()
     //create the stage on start
     this.stage = new Konva.Stage({
       container: 'container',
@@ -26,6 +34,25 @@ export class BoardComponent implements OnInit {
     this.layer = new Konva.Layer();//create layer on start
     this.stage.add(this.layer);//add the layer to the stage on start
   }
+
+  //methods for websocket
+  connect(){
+    this.webSocketAPI._connect();
+  }
+
+  disconnect(){
+    this.webSocketAPI._disconnect();
+  }
+
+  sendMessage(){
+    this.webSocketAPI._send(this.name);
+  }
+
+  handleMessage(message: string){
+    console.log("handled")
+    this.message = message;
+  }
+  //end of websocket
 
   /**
    * clears all the board
