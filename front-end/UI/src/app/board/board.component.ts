@@ -69,7 +69,7 @@ export class BoardComponent implements OnInit {
   }
 
   /**
-   * filter shapes array according to which group
+   * filter shapes array according to given element
    *
    * @param criteria group to be filtered with
    * @returns filtered array
@@ -77,6 +77,18 @@ export class BoardComponent implements OnInit {
   getShapeWithTextFromArray(criteria:any){
     var x = this.shapes.filter(function(element){
       return element.getShapeWithText() == criteria;
+    });
+    return x;
+  }
+  /**
+   * filter shapes array according to given name
+   *
+   * @param name name of the shape element
+   * @returns filtered array
+   */
+  getShapeWithTextFromArrayByName(name:string){
+    var x = this.shapes.filter(function(element){
+      return element.getShapeWithText().getShape().name() == name;
     });
     return x;
   }
@@ -93,6 +105,7 @@ export class BoardComponent implements OnInit {
     var color;
     //if M
     if(string == 'M'){
+      ////////////////////////this.req.addMachine();////////////////////////////////
       color = 'green'
       console.log("add Ms")
       shape = new Konva.Circle({
@@ -118,6 +131,7 @@ export class BoardComponent implements OnInit {
     }
     //if Q
     else{
+      /////////////////////////////this.req.addQueue()///////////////////////////////
       color = 'yellow'
       console.log("addQs")
       shape = new Konva.Rect({
@@ -202,8 +216,8 @@ export class BoardComponent implements OnInit {
           //get the source and destination shapes
           var x = component.getShapeWithTextFromArray(source);
           var y = component.getShapeWithTextFromArray(destination);
-          //add the arrow to the shapes's arrays
-          if(x[0].getShape().name().includes('M')){
+
+          if(source.name().includes('M')){
             var followers = x[0].getFollowersOut();
             var f = followers.filter(function(element:any){
               return element.getDestination().name().includes('Q');
@@ -214,6 +228,10 @@ export class BoardComponent implements OnInit {
               return
             }
           }
+          /////////////////////////////requestLine/////////////////////////////////////////////////////
+          //component.req.addArrow(source.name(),destination)
+
+          //add the arrow to the shapes's arrays
           x[0].addFollowerOut(arrow);
           y[0].addFollowerIn(arrow);
           var num = x[0].getProductsNumber()

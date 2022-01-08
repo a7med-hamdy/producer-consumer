@@ -10,9 +10,10 @@ public class waitingList implements vertex{
     public waitingList(String name) {
         this.name = name;
     }
+    public waitingList(){}
 
 
-    public void add(String str){
+    synchronized public void add(String str){
         if(list.size() == 0)
         {
             notifyAll();
@@ -27,6 +28,7 @@ public class waitingList implements vertex{
             System.out.println(Thread.currentThread().getName()+" is going to sleep");
             try {
                 wait();
+                return null;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
