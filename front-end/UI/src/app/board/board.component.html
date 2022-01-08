@@ -1,12 +1,32 @@
 <header>
   <div class="operations">
-    <button><div title="Add Machine" (click)="add('M')" class = "button-text">+M</div></button>
-    <button><div title="Add Queues" (click)="add('Q')" class = "button-text">+Q</div></button>
-    <button><div title="Connect with Arrows" (click) = "addArrow()" class = "button-text">↗</div></button>
-    <button><div title="Start Simulation" class = "button-text">▶</div></button>
-    <button><div title="Stop Simulation" class = "button-text">◼</div></button>
-    <button><div title="Replay Previous Simulation" class = "button-text">⟲</div></button>
-    <button><div title="Clear all the board" (click)="clearAll()" class = "button-text">C</div></button>
+    <button [disabled] = 'Choosing' title="Add Machine" (click)="add('M')">
+      <div class = "button-text">+M</div>
+    </button>
+
+    <button [disabled] = 'Choosing' title="Add Queues" (click)="add('Q')">
+      <div  class = "button-text">+Q</div>
+    </button>
+
+    <button [disabled] = 'Choosing'(click) = "addArrow()">
+      <div title="Connect with Arrows"class = "button-text">↗</div>
+    </button>
+
+    <button>
+      <div title="Start Simulation" class = "button-text">▶</div>
+    </button>
+
+    <button>
+      <div title="Stop Simulation" class = "button-text">◼</div>
+    </button>
+
+    <button>
+      <div title="Replay Previous Simulation" class = "button-text">⟲</div>
+    </button>
+
+    <button title="Clear all the board" (click)="clearAll()">
+      <div class = "button-text">C</div>
+    </button>
   </div>
 
 </header>

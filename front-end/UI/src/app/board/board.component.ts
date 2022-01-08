@@ -15,7 +15,7 @@ export class BoardComponent implements OnInit {
   layer!:Konva.Layer;
   numOfQs = 0;
   numOfMs = 0;
-
+  Choosing = false
   webSocketAPI!: WebSocketAPI;
   message: any;
   name: string = '';
@@ -175,6 +175,7 @@ export class BoardComponent implements OnInit {
     var source:any;
     var destination:any;
     var clicks = 0;
+    this.Choosing = true
     var component = this;
     this.stage.on("click",function(e){
       clicks++;
@@ -208,6 +209,7 @@ export class BoardComponent implements OnInit {
               return element.getDestination().name().includes('Q');
             });
             if(f.length != 0){
+              component.Choosing=false
               component.stage.off('click');
               return
             }
@@ -224,6 +226,7 @@ export class BoardComponent implements OnInit {
 
           //console.log(y[0].BackArrows)
         }
+        component.Choosing=false
         component.stage.off('click');
       }
     });
