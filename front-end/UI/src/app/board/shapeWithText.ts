@@ -51,6 +51,8 @@ export class ShapeWithText{
   getProductsNumber(){return this.Products;}
   getFollowersOut(){return this.OutArrows;}
   getFollowersIn(){return this.InArrows;}
+
+
   addFollowerIn(arrow:any){
     this.InArrows.push(arrow);
   }
