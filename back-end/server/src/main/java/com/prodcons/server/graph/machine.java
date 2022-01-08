@@ -2,40 +2,55 @@ package com.prodcons.server.graph;
 
 import java.util.ArrayList;
 
-public class machine implements vertex {
-    ArrayList<waitingList> befoList=new ArrayList<waitingList>();
-    waitingList after;
-
-    public void adding(waitingList after){
-   
-        this.after=after;
-    }
-    public void addingB(waitingList after){
-        this.befoList.add(after);
-    }
-    public void noter(Boolean z){
-        System.out.println(z);
-        for(waitingList i : befoList){
-            i.update(z);
-        }
+public class machine implements vertex, Runnable {
+    public String name;
+    private ArrayList<waitingList> queues;
+    private waitingList after;
+    private Thread t;
+    private int time = 0;
+    public machine(ArrayList<waitingList> queues, String name, int time)
+    {
+        this.name = name;
+        this.time = time;
+        this.t = new Thread(this, this.name);
+        this.t.start();
+        this.queues = queues;
     }
 
-    synchronized public void process(String z,String string) {
-        this.noter(false);
-         // making a random number for id
-         int min=500,max=3000;
-         int x=(int)Math.floor(Math.random()*(max-min+1)+min);
+    private void process(String product) {
         try{
-            Thread.sleep(x);
+            Thread.sleep(time);
         }catch(Exception e){System.out.println(e);}
-        System.out.println(x);
-        System.out.println(z);
-        if(this.after!=null){
-        this.after.add();
-        this.after.show();
-        }
-        this.noter(true);
-    
+        System.out.println(product);
     }
-  
+
+    public void setAfter(waitingList w)
+    {
+        this.after = w;
+    }
+    @Override
+    public void run() {
+        while(true)
+        {
+            for (waitingList q : this.queues)
+            {
+                String product = "";
+                synchronized(q){
+                    product = q.getProduct();  
+                }
+                if(product == null)
+                {
+                    continue;
+                }
+                this.process(product);
+                if(this.after != null)
+                {
+                    synchronized(this.after)
+                    {
+                        this.after.add(product);
+                    }  
+                }
+            }
+        }
+    }
 }

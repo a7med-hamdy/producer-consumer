@@ -1,7 +1,9 @@
 package com.prodcons.server;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.prodcons.server.graph.machine;
-import com.prodcons.server.graph.product;
 import com.prodcons.server.graph.waitingList;
 
 import org.springframework.boot.SpringApplication;
@@ -12,26 +14,27 @@ public class ServerApplication {
 
 	public static void main(String[] args){
 		SpringApplication.run(ServerApplication.class, args);
-		
-		machine c2= new machine();
-		machine c= new machine();
-		
-		waitingList lastlist= new waitingList(c2,"fourthList");
-		waitingList fourthList= new waitingList(c2,"fourthList");
-		c.adding(fourthList);
-		waitingList firsList= new waitingList(c,"firsList");
-		waitingList secondList= new waitingList(c,"secondList");
-		c.addingB(firsList);
-		c.addingB(secondList);
-		c2.addingB(firsList);
-		c2.addingB(secondList);
-		for(int i=0;i<10;i++){
-			firsList.add();
-			secondList.add();
-		}
+		waitingList w1 = new waitingList("Q0");
+		waitingList w2 = new waitingList("Q1");
+		machine m1 = new machine( new ArrayList<>(Arrays.asList(w1)), "M1",10000);
+		machine m2 = new machine( new ArrayList<>(Arrays.asList(w1)), "M2",200);
+		machine m3 = new machine( new ArrayList<>(Arrays.asList(w2)), "M3",1);
+		m1.setAfter(w2);
+		m2.setAfter(w2);
 
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("starting input");
+
+		synchronized(w1){
+			w1.add("product");
+			w1.add("product2");
+		}
 		
-	
 	}
 
 }
+
