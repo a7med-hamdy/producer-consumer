@@ -42,8 +42,21 @@ export class RequestsService {
   }
 
 /**************************************************
+ * Demolition requests                            *
+ **************************************************/
+  // clear the whole graph request
+  clear(){
+    this.http.delete<any>(`${this.url}/clear`)
+    .subscribe(done => {
+      if(done) console.log("Graph deleted!!")
+      else     console.log("Error!! Graph wasn't deleted.")
+    })
+  }
+
+/**************************************************
  * Simulation requests                            *
  **************************************************/
+  // start simulation request
   play(){
     this.http.post<any>(`${this.url}/play`, {})
     .subscribe(done => {
@@ -52,6 +65,7 @@ export class RequestsService {
     })
   }
 
+  // stop simulation request
   stop(){
     this.http.post<any>(`${this.url}/stop`, {})
     .subscribe(done => {
@@ -60,6 +74,7 @@ export class RequestsService {
     })
   }
 
+  // replay a specified simulation request 
   replay(id: number){
     this.http.post<any>(`${this.url}/replay/${id}`, {})
     .subscribe(done => {
