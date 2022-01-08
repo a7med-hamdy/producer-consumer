@@ -22,9 +22,9 @@ export class BoardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    //this.webSocketAPI = new WebSocketAPI(new BoardComponent());
+    this.webSocketAPI = new WebSocketAPI(new BoardComponent());
     //connect to backend at start
-    //this.connect()
+    this.connect()
     //create the stage on start
     this.stage = new Konva.Stage({
       container: 'container',
