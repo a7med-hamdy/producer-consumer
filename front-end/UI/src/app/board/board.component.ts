@@ -246,19 +246,19 @@ export class BoardComponent implements OnInit {
             }
           }
           /////////////////////////////requestLine/////////////////////////////////////////////////////
-          component.req.addArrow(source.name(),destination.name());
-          arrow = new Arrow(source,destination);      //create new arrow component
-
+          component.req.addArrow(source.name(),destination.name()).subscribe(data =>{
+            if(data == false){return;}
+            else{
+              arrow = new Arrow(source,destination); //create new arrow component
+              x.addFollowerOut(arrow);
+              y.addFollowerIn(arrow);
+              x.playFlashAnimation();
           //add the arrow to the shapes's arrays
-          x.addFollowerOut(arrow);
-          y.addFollowerIn(arrow);
-          x.playFlashAnimation();
-
-          component.pointers.push(arrow);
-          component.layer.add(arrow.getArrow());//add arrow to the layer to display
-          //console.log(x[0].FrontArrows)
-
-          //console.log(y[0].BackArrows)
+              component.pointers.push(arrow);
+          //add arrow to the layer to display
+              component.layer.add(arrow.getArrow());
+            }
+          });
         }
         component.Choosing=false
         component.stage.off('click');

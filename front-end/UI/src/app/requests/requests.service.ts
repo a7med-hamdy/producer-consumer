@@ -46,9 +46,7 @@ export class RequestsService {
   // > Arrow < creation request
   addArrow(from: string, to: string){
     let info = `/${from}/${to}`
-    return this.http.post<any>(`${this.url}/+shm${info}`, {}).subscribe(data =>{
-      console.log(data);
-    });
+    return this.http.post<any>(`${this.url}/+shm${info}`, {});
     /* this.req.addArrow(from, to).subscribe(done => {
       if(done){
         console.log("Arrow added!!")
