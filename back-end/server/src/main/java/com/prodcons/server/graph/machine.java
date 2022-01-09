@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.prodcons.server.websocket.WSService;
+
+import org.json.JSONObject;
+
 public class machine implements vertex, Runnable, observer {
     public String name;
     private List<waitingList> queues = Collections.synchronizedList(new ArrayList<waitingList>());
@@ -21,8 +25,12 @@ public class machine implements vertex, Runnable, observer {
     public machine(){}
 
     private void process(String product) {
+        JSONObject obj = new JSONObject();
+        obj.putOpt("name", this.name);
+		obj.putOpt("change", product); 
+        WSService.notifyFrontend(obj.toString());
         try{
-            Thread.sleep(time);
+            Thread.sleep(this.time);
         }catch(Exception e){System.out.println(e);}
         System.out.println(this.name + " processed " + product);
     }
@@ -43,48 +51,59 @@ public class machine implements vertex, Runnable, observer {
     }
     public void update()
     {
-        System.out.println(this.t.getName()+ " is notified");
-        synchronized(this.queues)
+        if(this.t.getState().toString().equalsIgnoreCase("waiting"))
         {
-            this.queues.notifyAll();
+            System.out.println(this.t.getName()+ " is notified");
+            synchronized(this.queues)
+            {
+                this.queues.notifyAll();
+            }
         }
     }
     @Override
     public void run() {
         boolean wait = true;
+        String product = "";
         while(true)
         {
+            wait = true;
             synchronized(this.queues){
                 Iterator<waitingList> i  = this.queues.iterator();
                 while(i.hasNext())
                 {
-                    wait = true;
                     waitingList q = i.next();
-                    String product = "";
-                    product = q.getProduct(); 
-                    if(product == null)
-                    {
-                        continue;
-                    }
-                    wait = false;
-                    this.process(product);
-                    if(this.after != null)
-                    {
-                        synchronized(this.after)
+                    synchronized(q){
+                        product = q.getProduct(); 
+                        if(product != null)
                         {
-                            this.after.add(product);
-                        }  
+                            wait = false;
+                            break;
+                        } 
                     }
                 }
-                if(wait)
+            }
+            if(wait)
+            {
+                System.out.println(Thread.currentThread().getName()+" is going to sleep");
+                JSONObject obj = new JSONObject();
+                obj.putOpt("name", this.name);
+                obj.putOpt("change", "flash"); 
+                WSService.notifyFrontend(obj.toString());
+                try {
+                    synchronized(this.queues){this.queues.wait();}
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName()+" woke up");
+                continue;
+            }
+            this.process(product);
+            if(this.after != null)
+            {
+                synchronized(this.after)
                 {
-                    System.out.println(Thread.currentThread().getName()+" is going to sleep");
-                    try {
-                        this.queues.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                    this.after.add(product);
+                } 
             }
         }
     }

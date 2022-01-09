@@ -2,8 +2,6 @@ package com.prodcons.server;
 
 
 import com.prodcons.server.graph.Graph;
-
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -31,14 +29,15 @@ public class ServerApplication {
 		g.addEdge("Q3", "M3");
 		g.addEdge("M3", "Q4");
 		g.startSimulation();
+		
 		while(true)
 		{
 			try {
 				Thread.sleep(1000);
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			// System.out.println("working...");
 		}
 
 	}

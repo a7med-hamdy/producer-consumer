@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class WSService {
 
-    private final SimpMessagingTemplate messagingTemplate;
+    private static  SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     public WSService(SimpMessagingTemplate messagingTemplate){
-        this.messagingTemplate = messagingTemplate;
+        WSService.messagingTemplate = messagingTemplate;
     }
 
     
@@ -19,7 +19,7 @@ public class WSService {
      * Sends the update to the Frontend
      * @param message
      */
-    public void notifyFrontend(final String message){
+    public static synchronized void notifyFrontend(final String message){
 
         //send the message to all subscribers
         messagingTemplate.convertAndSend("/topic/board", message);
