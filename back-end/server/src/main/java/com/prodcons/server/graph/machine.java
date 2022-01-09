@@ -107,4 +107,8 @@ public class machine implements vertex, Runnable, observer {
             }
         }
     }
+    @Override
+    public String getName() {
+        return this.name;
+    }
 }

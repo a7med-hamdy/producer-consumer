@@ -1,9 +1,11 @@
 package com.prodcons.server.graph;
 
 import java.util.ArrayList;
-
+import java.util.Set;
 
 import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.webjars.NotFoundException;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
@@ -140,6 +142,26 @@ public class Graph {
             }
         }
     }
+    public String getGraphJson()
+    {
+        JSONArray arr = new JSONArray();
+        Set<vertex> s = this.g.vertexSet();
+        for(vertex v: s)
+        {
+            JSONObject obj = new JSONObject();
+            obj.putOpt("name", v.getName());
+            Set<DefaultEdge> descendants = this.g.outgoingEdgesOf(v);
+            JSONArray to = new JSONArray();
+            for(DefaultEdge descendant : descendants)
+            {
+                to.put(this.g.getEdgeTarget(descendant).getName());
+            }
+            obj.putOpt("to", to);
+            arr.put(obj);
+        }
+        
+        return arr.toString();
+    }
     private Pair<waitingList,String> findQueue(String src, String dst) throws NotFoundException
     {
         for(waitingList w : this.queues)
@@ -174,6 +196,20 @@ public class Graph {
         throw new NotFoundException("unexpected Error: machine not found");
     }
    public void replay(){
-
+    for(int i = 0; i < 15; i++)
+    {
+        int time= this.times.get(i);
+        int index = this.indexes.get(i);
+        this.indexes.add(index);
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        synchronized(this.rootQueue)
+        {
+            this.rootQueue.add(colors.values()[index].toString());
+        }
+    }
    }
 }

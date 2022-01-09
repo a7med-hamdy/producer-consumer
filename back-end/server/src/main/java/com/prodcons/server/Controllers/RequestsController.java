@@ -67,12 +67,11 @@ public class RequestsController {
     @GetMapping("/getGraph/{id}")
     public String getGraph(@PathVariable int id){
         try{
-
+            return this.graph.getGraphJson();
         }
         catch(Exception e){
             return "Graph";
         }
-        return null;
     }
  
     @DeleteMapping("/clear")
@@ -104,18 +103,6 @@ public class RequestsController {
         }
         return true;
     }
-
-    /* @PostMapping("/stop")
-    public boolean stop(){
-        try{
-            //Stop it :)
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    } */
 
     @PostMapping("/replay")
     public boolean replay(){

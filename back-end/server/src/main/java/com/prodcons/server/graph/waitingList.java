@@ -58,4 +58,8 @@ public class waitingList implements vertex{
         WSService.notifyFrontend(obj.toString());
         return product;
     }
+    @Override
+    public String getName() {
+        return this.name;
+    }
 }
