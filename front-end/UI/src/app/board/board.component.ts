@@ -24,7 +24,7 @@ export class BoardComponent implements OnInit {
   constructor(private req:RequestsService) { }
 
   ngOnInit() {
-    this.webSocketAPI = new WebSocketAPI(new BoardComponent());
+    this.webSocketAPI = new WebSocketAPI(new BoardComponent(this.req));
     //connect to backend at start
     this.connect();
     //create the stage on start
@@ -63,6 +63,7 @@ export class BoardComponent implements OnInit {
    * clears all the board
    */
   clearAll(){
+    this.req.clear();
     this.shapes = [];
     this.pointers = [];
     this.layer.destroyChildren();
@@ -251,8 +252,6 @@ export class BoardComponent implements OnInit {
           //add the arrow to the shapes's arrays
           x.addFollowerOut(arrow);
           y.addFollowerIn(arrow);
-          var num = x.getProductsNumber();
-          x.updateProductsNumber(num+1);
           x.playFlashAnimation();
 
           component.pointers.push(arrow);

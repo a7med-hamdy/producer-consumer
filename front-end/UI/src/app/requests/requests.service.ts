@@ -7,7 +7,7 @@ export class RequestsService {
 
   Headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   url = "http://localhost:8080";
-  
+
   constructor(private http: HttpClient){}
 
 /**************************************************
@@ -15,7 +15,9 @@ export class RequestsService {
  **************************************************/
   // > Queue < creation request
   addQueue(){
-    return this.http.post<any>(`${this.url}/+Q`, {})
+    return this.http.post<any>(`${this.url}/+Q`, {}).subscribe(data =>{
+      console.log(data);
+    });
     /* this.req.addQueue().subscribe(done => {
       if(done){
         console.log("Queue added!!")
@@ -28,7 +30,9 @@ export class RequestsService {
 
   // > Machine < creation request
   addMachine(){
-    return this.http.post<any>(`${this.url}/+M`, {})
+    return this.http.post<any>(`${this.url}/+M`, {}).subscribe(data =>{
+      console.log(data);
+    });
     /* this.req.addMachine().subscribe(done => {
       if(done){
         console.log("Machine added!!")
@@ -38,11 +42,13 @@ export class RequestsService {
       }
     }) */
   }
-  
+
   // > Arrow < creation request
   addArrow(from: string, to: string){
     let info = `/${from}/${to}`
-    return this.http.post<any>(`${this.url}/+shm${info}`, {})
+    return this.http.post<any>(`${this.url}/+shm${info}`, {}).subscribe(data =>{
+      console.log(data);
+    });
     /* this.req.addArrow(from, to).subscribe(done => {
       if(done){
         console.log("Arrow added!!")
@@ -71,7 +77,9 @@ export class RequestsService {
 
   // clear the whole graph request
   clear(){
-    return this.http.delete<any>(`${this.url}/clear`)
+    return this.http.delete<any>(`${this.url}/clear`).subscribe(data =>{
+      console.log(data);
+    });
     /* this.req.clear().subscribe(done => {
       if(done){
         console.log("Graph deleted!!")
@@ -111,7 +119,7 @@ export class RequestsService {
     }) */
   }
 
-  // replay a specified simulation request 
+  // replay a specified simulation request
   replay(id: number){
     return this.http.post<any>(`${this.url}/replay/${id}`, {})
     /* this.req.replay(id).subscribe(done => {
