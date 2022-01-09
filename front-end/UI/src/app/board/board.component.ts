@@ -17,6 +17,7 @@ export class BoardComponent implements OnInit {
   numOfQs = 0;
   numOfMs = 0;
   Choosing = false
+  simulating = false
   webSocketAPI!: WebSocketAPI;
   message: any;
   name: string = '';
@@ -25,7 +26,7 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this.webSocketAPI = new WebSocketAPI(new BoardComponent(this.req));
     //connect to backend at start
-    this.connect()
+    this.connect();
     //create the stage on start
     this.stage = new Konva.Stage({
       container: 'container',
@@ -34,6 +35,7 @@ export class BoardComponent implements OnInit {
     });
     this.layer = new Konva.Layer();//create layer on start
     this.stage.add(this.layer);//add the layer to the stage on start
+    this.add('Q');
   }
 /***************************************************************************************************************** */
   //methods for websocket
@@ -67,6 +69,7 @@ export class BoardComponent implements OnInit {
     this.numOfQs = 0;
     this.numOfMs = 0;
     console.log(this.layer.getChildren());
+    this.add('Q');
   }
 
   /**
@@ -79,7 +82,7 @@ export class BoardComponent implements OnInit {
     var x = this.shapes.filter(function(element){
       return element.getShapeWithText() == criteria;
     });
-    return x;
+    return x[0];
   }
   /**
    * filter shapes array according to given name
@@ -91,7 +94,7 @@ export class BoardComponent implements OnInit {
     var x = this.shapes.filter(function(element){
       return element.getShapeWithText().getShape().name() == name;
     });
-    return x;
+    return x[0];
   }
 
 
@@ -103,18 +106,18 @@ export class BoardComponent implements OnInit {
     var shape;
     var text1;
     var text2;
-    var color;
+    var color = 'grey';
     //if M
     if(string == 'M'){
-      ////////////////////////this.req.addMachine();////////////////////////////////
-      color = 'green'
-      console.log("add Ms")
+      this.req.addMachine();
+      console.log(this.stage.height())
+      console.log("add Ms");
       shape = new Konva.Circle({
         name: 'M'+this.numOfMs.toString(),
-        x:300,
-        y:300,
+        x:0,
+        y:0,
         radius:50,
-        fill:'green',
+        fill: color,
       });
       text1 = new Konva.Text({
           offset:{x:shape.getAttr('radius')/8,
@@ -132,16 +135,16 @@ export class BoardComponent implements OnInit {
     }
     //if Q
     else{
-      /////////////////////////////this.req.addQueue()///////////////////////////////
-      color = 'yellow'
-      console.log("addQs")
+      if(this.numOfQs != 0)
+        this.req.addQueue();
+      console.log("addQs");
       shape = new Konva.Rect({
         name:'Q'+this.numOfQs.toString(),
         x:300,
         y:300,
         width:100,
         height:50,
-        fill:'yellow',
+        fill:color,
       });
       shape.setAttrs({
         offset:{x:shape.getAttr('width')/2,
@@ -213,31 +216,44 @@ export class BoardComponent implements OnInit {
         console.log("Two clicks")
         if(source != null && destination != null && source != destination){
           console.log("adding arrows!")
-          arrow = new Arrow(source,destination);      //create new arrow component
           //get the source and destination shapes
           var x = component.getShapeWithTextFromArray(source);
           var y = component.getShapeWithTextFromArray(destination);
 
           if(source.name().includes('M')){
-            var followers = x[0].getFollowersOut();
+            var followers = x.getFollowersOut();
             var f = followers.filter(function(element:any){
               return element.getDestination().name().includes('Q');
             });
+
             if(f.length != 0){
+              component.Choosing=false
+              component.stage.off('click');
+              return
+            }
+            else if(destination.name().includes('M')){
+              component.Choosing=false
+              component.stage.off('click');
+              return
+            }
+          }
+          else{
+            if(destination.name().includes('Q')){
               component.Choosing=false
               component.stage.off('click');
               return
             }
           }
           /////////////////////////////requestLine/////////////////////////////////////////////////////
-          //component.req.addArrow(source.name(),destination)
+          component.req.addArrow(source.name(),destination.name());
+          arrow = new Arrow(source,destination);      //create new arrow component
 
           //add the arrow to the shapes's arrays
-          x[0].addFollowerOut(arrow);
-          y[0].addFollowerIn(arrow);
-          var num = x[0].getProductsNumber();
-          x[0].updateProductsNumber(num+1);
-          x[0].playFlashAnimation();
+          x.addFollowerOut(arrow);
+          y.addFollowerIn(arrow);
+          var num = x.getProductsNumber();
+          x.updateProductsNumber(num+1);
+          x.playFlashAnimation();
 
           component.pointers.push(arrow);
           component.layer.add(arrow.getArrow());//add arrow to the layer to display

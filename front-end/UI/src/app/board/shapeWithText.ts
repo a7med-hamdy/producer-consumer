@@ -37,6 +37,8 @@ export class ShapeWithText{
     this.Group = new Konva.Group({
       name:this.shape.name(),
       draggable: true,
+      x:this.shape.x(),
+      y:this.shape.y(),
       offsetX:this.shape.x(),
       offsetY:this.shape.y()
     });

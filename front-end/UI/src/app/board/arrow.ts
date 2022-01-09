@@ -8,10 +8,10 @@ export class Arrow{
     this.Destination = dst;
     this.arrow = new Konva.Arrow({
       points:[
-      this.Source.x()+33,
-      this.Source.y()+33,
-      this.Destination.x()-33,
-      this.Destination.y()-33
+      this.Source.x()+50,
+      this.Source.y()+25,
+      this.Destination.x()-50,
+      this.Destination.y()-25
     ],
     fill:'black',
     stroke:'black'
@@ -20,10 +20,10 @@ export class Arrow{
     var component = this;
     function Follow(){
       const pointsArr = [
-        component.Source.x()+33,
-        component.Source.y()+33,
-        component.Destination.x()-33,
-        component.Destination.y()-33,
+        component.Source.x()+50,
+        component.Source.y()+25,
+        component.Destination.x()-50,
+        component.Destination.y()-25,
       ]
       component.arrow.setAttrs({
         points:pointsArr,
