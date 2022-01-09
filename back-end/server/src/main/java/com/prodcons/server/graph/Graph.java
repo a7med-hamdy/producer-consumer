@@ -13,6 +13,8 @@ public class Graph {
     private ArrayList<machine> machines = new ArrayList<>();
     private waitingList rootQueue;
     private ArrayList<waitingList> queues = new ArrayList<>();
+    private ArrayList<Integer> times = new ArrayList<>();
+    private ArrayList<Integer> indexes = new ArrayList<>();
     public Graph ()
     {
         rootQueue = new waitingList("Q" + this.queues.size());
@@ -119,6 +121,7 @@ public class Graph {
         {
             int min=100,max=10000;
             int time=(int)Math.floor(Math.random()*(max-min+1)+min);
+
         }
     }
     private Pair<waitingList,String> findQueue(String src, String dst) throws NotFoundException
@@ -154,4 +157,7 @@ public class Graph {
         System.out.println("unexpected Error: machine not found");
         throw new NotFoundException("unexpected Error: machine not found");
     }
+   public void replay(){
+
+   }
 }

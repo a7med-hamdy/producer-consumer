@@ -1,18 +1,24 @@
 package com.prodcons.server.Controllers;
 
+import com.prodcons.server.graph.*;
+
+
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 public class RequestsController {
-    
+    Graph graph=new Graph();
+    Originator origin= new Originator();
+    careTaker cTaker= new careTaker();
+
 /**************************************************
  * Craeation board requests                       *
  **************************************************/
     @PostMapping("/+Q")
     public boolean addQueue(){
         try{
-            //add the Queue
+            graph.addQueue();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -24,7 +30,7 @@ public class RequestsController {
     @PostMapping("/+M")
     public boolean addMachine(){
         try{
-            //add the Machine
+            graph.addMachine();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -41,7 +47,7 @@ public class RequestsController {
         @PathVariable("to") String to)
     {
         try{
-            //add the Arrow
+            graph.addEdge(from, to);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -67,7 +73,7 @@ public class RequestsController {
     @DeleteMapping("/clear")
     public boolean clearGragh(){
         try{
-            //Clear the whole graph
+            graph=new Graph();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -83,7 +89,9 @@ public class RequestsController {
     @PostMapping("/play")
     public boolean play(){
         try{
-            //Let's play
+           graph.startSimulation();
+           origin.setState(graph);
+           cTaker.addMemento(origin.getMemento());
         }
         catch(Exception e){
             e.printStackTrace();
@@ -104,10 +112,11 @@ public class RequestsController {
         return true;
     } */
 
-    @PostMapping("/replay/{simulationID}")
-    public boolean replay(@PathVariable int simulationID){
+    @PostMapping("/replay")
+    public boolean replay(){
         try{
-            //Replay this simulation
+            graph=cTaker.getMemento().getState();
+            graph.replay();
         }
         catch(Exception e){
             e.printStackTrace();
