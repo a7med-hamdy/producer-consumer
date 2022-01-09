@@ -26,6 +26,7 @@ public class Graph {
         yellow,
         black, 
         violet,
+        cyan,
     }
     //for machine 
     public void addMachine() {
@@ -114,9 +115,10 @@ public class Graph {
         // }
         // this.rootQueue.add("green");
         // this.rootQueue.add("yellow");
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 15; i++)
         {
-            
+            int min=100,max=10000;
+            int time=(int)Math.floor(Math.random()*(max-min+1)+min);
         }
     }
     private Pair<waitingList,String> findQueue(String src, String dst) throws NotFoundException
