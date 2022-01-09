@@ -24,7 +24,7 @@ export class BoardComponent implements OnInit {
   constructor(private req:RequestsService) { }
 
   ngOnInit() {
-    this.webSocketAPI = new WebSocketAPI(new BoardComponent(this.req));
+    this.webSocketAPI = new WebSocketAPI(new BoardComponent());
     //connect to backend at start
     this.connect();
     //create the stage on start

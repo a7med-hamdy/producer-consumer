@@ -1,10 +1,6 @@
 package com.prodcons.server.graph;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -17,17 +13,28 @@ public class Graph {
     private ArrayList<machine> machines = new ArrayList<>();
     private waitingList rootQueue;
     private ArrayList<waitingList> queues = new ArrayList<>();
+    private ArrayList<Integer> times = new ArrayList<>();
+    private ArrayList<Integer> indexes = new ArrayList<>();
     public Graph ()
     {
         rootQueue = new waitingList("Q" + this.queues.size());
         this.queues.add(rootQueue);
         this.g.addVertex(rootQueue);
     }
+    enum colors{
+        red,
+        blue,
+        green,
+        yellow,
+        black, 
+        violet,
+        cyan,
+    }
     //for machine 
     public void addMachine() {
         int min=100,max=10000;
         int time=(int)Math.floor(Math.random()*(max-min+1)+min);
-        machine m = new machine(new ArrayList<waitingList>(), "M" + this.machines.size(),time);
+        machine m = new machine("M" + this.machines.size(),time);
         this.machines.add(m);
         this.g.addVertex(m);
     }
@@ -77,6 +84,7 @@ public class Graph {
             try{
                 g.addEdge(found2.getFirst(), found.getFirst());
                 found.getFirst().addQueue(found2.getFirst());
+                found2.getFirst().subscribe(found.getFirst());
             }
             catch(IllegalArgumentException  e)
             {
@@ -84,24 +92,37 @@ public class Graph {
                 return "error cycle";
             }
         }
-        
         return "success";
     }
     public void startSimulation()
     {
-        this.rootQueue.add("red");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        System.out.println("starting input");
+        // try {
+        //     Thread.sleep(20);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
+        // this.rootQueue.add("blue");
+        // this.rootQueue.add("red");
+        // try {
+        //     Thread.sleep(2000);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
+        // this.rootQueue.add("violet");
+        // try {
+        //     Thread.sleep(1500);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
+        // this.rootQueue.add("green");
+        // this.rootQueue.add("yellow");
+        for(int i = 0; i < 15; i++)
+        {
+            int min=100,max=10000;
+            int time=(int)Math.floor(Math.random()*(max-min+1)+min);
+
         }
-        this.rootQueue.add("blue");
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        this.rootQueue.add("green");
     }
     private Pair<waitingList,String> findQueue(String src, String dst) throws NotFoundException
     {
@@ -136,4 +157,7 @@ public class Graph {
         System.out.println("unexpected Error: machine not found");
         throw new NotFoundException("unexpected Error: machine not found");
     }
+   public void replay(){
+
+   }
 }

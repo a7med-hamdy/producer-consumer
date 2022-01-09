@@ -9,7 +9,8 @@ public class careTaker {
         memolist.add(memento);
     }
 
-    public Memento getMemento(int index){
-        return memolist.get(index);
+    public Memento getMemento(){
+        int i =this.memolist.size()-1;
+        return memolist.get(i);
     }
 }
