@@ -3,6 +3,7 @@ import  Konva from 'konva';
 import { WebSocketAPI } from '../WebSocketAPI';
 import { ShapeWithText } from './shapeWithText'
 import { Arrow } from './arrow';
+import { RequestsService } from '../requests/requests.service';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -19,7 +20,7 @@ export class BoardComponent implements OnInit {
   webSocketAPI!: WebSocketAPI;
   message: any;
   name: string = '';
-  constructor() { }
+  constructor(private req:RequestsService) { }
 
   ngOnInit() {
     this.webSocketAPI = new WebSocketAPI(new BoardComponent());
@@ -234,9 +235,9 @@ export class BoardComponent implements OnInit {
           //add the arrow to the shapes's arrays
           x[0].addFollowerOut(arrow);
           y[0].addFollowerIn(arrow);
-          var num = x[0].getProductsNumber()
+          var num = x[0].getProductsNumber();
           x[0].updateProductsNumber(num+1);
-
+          x[0].playFlashAnimation();
 
           component.pointers.push(arrow);
           component.layer.add(arrow.getArrow());//add arrow to the layer to display
