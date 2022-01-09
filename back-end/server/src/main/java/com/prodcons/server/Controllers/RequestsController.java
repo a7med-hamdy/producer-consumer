@@ -1,10 +1,6 @@
 package com.prodcons.server.Controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -13,10 +9,8 @@ public class RequestsController {
 /**************************************************
  * Craeation board requests                       *
  **************************************************/
-    
     @PostMapping("/+Q")
-    public boolean addQueue()
-    {
+    public boolean addQueue(){
         try{
             //add the Queue
         }
@@ -28,8 +22,7 @@ public class RequestsController {
     }
 
     @PostMapping("/+M")
-    public boolean addMachine()
-    {
+    public boolean addMachine(){
         try{
             //add the Machine
         }
@@ -37,6 +30,7 @@ public class RequestsController {
             e.printStackTrace();
             return false;
         }
+        System.out.println("Machine");
         return true;
     }
 
@@ -57,8 +51,19 @@ public class RequestsController {
     }
 
 /**************************************************
- * Demolition requests                            *
+ * Getting & Deleting requests                    *
  **************************************************/
+    @GetMapping("/getGraph/{id}")
+    public String getGraph(@PathVariable int id){
+        try{
+
+        }
+        catch(Exception e){
+            return "Graph";
+        }
+        return null;
+    }
+ 
     @DeleteMapping("/clear")
     public boolean clearGragh(){
         try{
@@ -87,7 +92,7 @@ public class RequestsController {
         return true;
     }
 
-    @PostMapping("/stop")
+    /* @PostMapping("/stop")
     public boolean stop(){
         try{
             //Stop it :)
@@ -97,7 +102,7 @@ public class RequestsController {
             return false;
         }
         return true;
-    }
+    } */
 
     @PostMapping("/replay/{simulationID}")
     public boolean replay(@PathVariable int simulationID){
