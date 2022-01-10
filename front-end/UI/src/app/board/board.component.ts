@@ -62,8 +62,10 @@ export class BoardComponent implements OnInit {
       for(var i = 0; i < this.wareHouseQueues.length;i++){
         sum += this.wareHouseQueues[i].getProductsNumber();
       }
-      if(sum == 15){
+      if(sum == 2){
         this.simulating = false;
+        this.req.save(JSON.stringify(this.shapes))
+
       }
     }
   }
@@ -109,6 +111,7 @@ export class BoardComponent implements OnInit {
         this.req.play().subscribe();
       }
       else{
+
         this.simulating = false;
       }
     })
@@ -217,6 +220,8 @@ export class BoardComponent implements OnInit {
     //console.log(s);
     this.shapes.push(SwithT);
     this.layer.add(SwithT.getShapeWithText())
+    console.log(JSON.stringify(this.shapes))
+    console.log(JSON.parse(JSON.stringify(this.shapes)))
   }
 
 

@@ -108,8 +108,8 @@ export class RequestsService {
   }
 
   // stop simulation request
-  stop(){
-    return this.http.post<any>(`${this.url}/stop`, {})
+  save(shapes:string){
+    return this.http.post<any>(`${this.url}/save`, {params :{shape:shapes}}).subscribe()
     /* this.req.stop().subscribe(done => {
       if(done){
         console.log("Simulation stopped!!")
@@ -119,7 +119,9 @@ export class RequestsService {
       }
     }) */
   }
-
+  load(){
+    return this.http.post<any>(`${this.url}/load`,{})
+  }
   // replay a specified simulation request
   replay(id: number){
     return this.http.post<any>(`${this.url}/replay/${id}`, {})
