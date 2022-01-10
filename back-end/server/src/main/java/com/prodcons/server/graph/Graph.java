@@ -98,6 +98,14 @@ public class Graph {
         }
         return "success";
     }
+    public boolean valdiateSimulation()
+    {
+        for (machine m : machines)
+        {
+            if(m.getAfter() == null){return false;}
+        }
+        return true;
+    }
     public void startSimulation()
     {
         // System.out.println("starting input");
@@ -125,8 +133,7 @@ public class Graph {
         // this.rootQueue.add("green");
         // this.rootQueue.add("yellow");
         // }
-        
-        JSONArray arr = new JSONArray();
+       
         for(waitingList w : queues)
         {
             JSONObject obj = new JSONObject();
@@ -135,19 +142,13 @@ public class Graph {
                 System.out.println(w.name);
                 obj.putOpt("name", w.name);
 		        obj.putOpt("change", "empty"); 
-                arr.put(obj);
             }
+            WSService.notifyFrontend(obj.toString());
         }
-        System.out.println(arr.toString());
-        WSService.notifyFrontend(arr.toString());
-
         for(machine m : machines)
         {
             m.startMachine();
         }
-        
-        
-
         for(int i = 0; i < 15; i++)
         {
             int min=100,max=10000;

@@ -52,7 +52,10 @@ public class machine implements vertex, Runnable, observer {
         }
         return -1;
     }
-
+    public waitingList getAfter()
+    {
+        return this.after;
+    }
     public void addQueue(waitingList w)
     {
         this.queues.add(w);
