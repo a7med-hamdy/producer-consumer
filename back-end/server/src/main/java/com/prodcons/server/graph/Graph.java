@@ -225,6 +225,18 @@ public class Graph {
     }
     public void replay(){
         System.out.println("////////////////////////start replay///////////////////////////////");
+        for(waitingList w : queues)
+        {
+            JSONObject obj = new JSONObject();
+            if(w.getSubscribersNumber() == 0)
+            {
+                System.out.println(w.name);
+                obj.putOpt("name", w.name);
+		        obj.putOpt("change", "empty"); 
+                WSService.notifyFrontend(obj.toString());
+            }
+            
+        }
         for(waitingList w : this.queues)
         {
             w.restartQueue();

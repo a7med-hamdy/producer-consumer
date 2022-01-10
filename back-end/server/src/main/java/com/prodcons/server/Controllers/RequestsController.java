@@ -109,7 +109,12 @@ public class RequestsController {
     @PostMapping("/load")
     public String load()
     {
-        return this.graph.getShapes();
+        String content = this.graph.getShapes();
+        if(content == null)
+        {
+            return "";
+        }
+        return content;
     }
     @PostMapping("/replay")
     public void replay(){
@@ -119,6 +124,7 @@ public class RequestsController {
         catch(IndexOutOfBoundsException e)
         {
             System.out.println("no available replay");
+            return;
         }
         this.graph.replay();
     }
