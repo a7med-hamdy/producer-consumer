@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 @Injectable({
   providedIn: 'root'
 })
@@ -109,7 +109,9 @@ export class RequestsService {
 
   // stop simulation request
   save(shapes:string){
-    return this.http.post<any>(`${this.url}/save`, {params :{shape:shapes}}).subscribe()
+    let params = new HttpParams();
+    params = params.append('shape', shapes);
+    return this.http.post<any>(`${this.url}/save`, params).subscribe()
     /* this.req.stop().subscribe(done => {
       if(done){
         console.log("Simulation stopped!!")
