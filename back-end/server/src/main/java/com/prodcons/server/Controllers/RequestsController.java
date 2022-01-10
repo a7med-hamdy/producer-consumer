@@ -75,7 +75,7 @@ public class RequestsController {
     }
  
     @DeleteMapping("/clear")
-    public boolean clearGragh(){
+    public boolean clearGraph(){
         try{
             this.graph=new Graph();
         }
@@ -91,19 +91,17 @@ public class RequestsController {
  * Simulation requests                            *
  **************************************************/
     @PostMapping("/play")
-    public boolean play(){
-        try{
-           this.graph.startSimulation();
-           this.origin.setState(graph);
-           this.cTaker.addMemento(origin.getMemento());
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public void play(){
+        this.graph.startSimulation();
+        this.origin.setState(graph);
+        this.cTaker.addMemento(origin.getMemento());
     }
 
+    @PostMapping("/validate")
+    public boolean validate(){
+        return this.graph.valdiateSimulation();
+    }
+    
     @PostMapping("/replay")
     public boolean replay(){
         try{
