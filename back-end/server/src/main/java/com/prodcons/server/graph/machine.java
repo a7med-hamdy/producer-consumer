@@ -33,6 +33,10 @@ public class machine implements vertex, Runnable, observer {
             Thread.sleep(this.time);
         }catch(Exception e){System.out.println(e);}
         System.out.println(this.name + " processed " + product);
+        JSONObject obj2 = new JSONObject();
+        obj2.putOpt("name", this.name);
+        obj2.putOpt("change", "flash"); 
+        WSService.notifyFrontend(obj2.toString());
     }
 
     public int setAfter(waitingList w)
@@ -85,10 +89,6 @@ public class machine implements vertex, Runnable, observer {
             if(wait)
             {
                 System.out.println(Thread.currentThread().getName()+" is going to sleep");
-                JSONObject obj = new JSONObject();
-                obj.putOpt("name", this.name);
-                obj.putOpt("change", "flash"); 
-                WSService.notifyFrontend(obj.toString());
                 try {
                     synchronized(this.queues){this.queues.wait();}
                 } catch (InterruptedException e) {
