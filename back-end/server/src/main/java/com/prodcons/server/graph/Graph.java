@@ -123,6 +123,10 @@ public class Graph {
         // this.rootQueue.add("green");
         // this.rootQueue.add("yellow");
         // }
+        for(machine m : machines)
+        {
+            m.startMachine();
+        }
         for(int i = 0; i < 15; i++)
         {
             int min=100,max=10000;

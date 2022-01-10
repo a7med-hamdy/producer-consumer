@@ -20,7 +20,6 @@ public class machine implements vertex, Runnable, observer {
         this.name = name;
         this.time = time;
         this.t = new Thread(this, this.name);
-        this.t.start();
     }
     public machine(){}
 
@@ -37,6 +36,11 @@ public class machine implements vertex, Runnable, observer {
         obj2.putOpt("name", this.name);
         obj2.putOpt("change", "flash"); 
         WSService.notifyFrontend(obj2.toString());
+    }
+
+    public void startMachine()
+    {
+        this.t.start();
     }
 
     public int setAfter(waitingList w)
