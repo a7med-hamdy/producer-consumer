@@ -22,6 +22,11 @@ public class WSService {
     public static synchronized void notifyFrontend(final String message){
 
         //send the message to all subscribers
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         messagingTemplate.convertAndSend("/topic/board", message);
     }
 }

@@ -210,11 +210,11 @@ export class BoardComponent implements OnInit {
     console.log(SwithT)
     var a = JSON.parse(JSON.stringify(SwithT))
     console.log(a)
-    var s = new ShapeWithText(Konva.Node.create(JSON.parse(a.shape)),
-    Konva.Node.create(JSON.parse(a.text1)),
-    Konva.Node.create(JSON.parse(a.text2)),
-    a.InArrows,a.OutArrows,a.color,a.Products)
-    console.log(s);
+    //var s = new ShapeWithText(Konva.Node.create(JSON.parse(a.shape)),
+   // Konva.Node.create(JSON.parse(a.text1)),
+    //Konva.Node.create(JSON.parse(a.text2)),
+    //a.InArrows,a.OutArrows,a.color,a.Products)
+    //console.log(s);
     this.shapes.push(SwithT);
     this.layer.add(SwithT.getShapeWithText())
   }
