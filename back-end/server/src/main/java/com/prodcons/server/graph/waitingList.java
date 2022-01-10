@@ -43,10 +43,7 @@ public class waitingList implements vertex{
         this.subscribers.add(m);
     }
     public void add(String str){
-        if(list.size() == 0)
-        {
-            this.Notify();
-        }
+        this.Notify();
         list.add(str);
         JSONObject obj = new JSONObject();
 		obj.putOpt("name", this.name);

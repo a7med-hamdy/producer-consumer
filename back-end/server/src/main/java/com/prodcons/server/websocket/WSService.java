@@ -28,7 +28,7 @@ public class WSService {
         }
         //send the message to all subscribers
         try {
-            Thread.sleep(500);
+            Thread.sleep(250);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
