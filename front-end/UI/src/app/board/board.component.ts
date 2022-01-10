@@ -26,7 +26,7 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this.webSocketAPI = new WebSocketAPI(this);
     //connect to backend at start
-    //this.connect();
+    this.connect();
     //create the stage on start
     this.stage = new Konva.Stage({
       container: 'container',
@@ -95,7 +95,6 @@ export class BoardComponent implements OnInit {
    * starts the simulation
    */
   startSimulation(){
-    this.connect();
     this.simulating = true;
     this.req.play().subscribe(data=>{
       console.log(data);
