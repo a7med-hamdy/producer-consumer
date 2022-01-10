@@ -10,7 +10,7 @@ public class ServerApplication {
 
 	public static void main(String[] args){
 		SpringApplication.run(ServerApplication.class, args);
-		Graph g = new Graph();
+		/*Graph g = new Graph();
 		g.addMachine();
 		g.addMachine();
 		g.addMachine();
@@ -30,7 +30,7 @@ public class ServerApplication {
 		g.addEdge("M3", "Q4");
 		// g.startSimulation();
 		
-		System.out.println(g.getGraphJson());
+		System.out.println(g.getGraphJson());*/
 
 	}
 

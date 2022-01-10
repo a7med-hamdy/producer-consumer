@@ -40,7 +40,7 @@ export class WebSocketAPI {
 
 	/**
 	 * Send message to sever via web socket
-	 * @param {*} message 
+	 * @param {*} message
 	 */
     _send(message: any) {
         console.log("calling logout api via web socket");
@@ -49,6 +49,6 @@ export class WebSocketAPI {
 
     onMessageReceived(message: any) {
         console.log("Message Recieved from Server :: " + message.body);
-        this.boardComponent.handleMessage(JSON.stringify(message.body));
+        this.boardComponent.handleMessage((message.body));
     }
 }

@@ -24,9 +24,9 @@ export class BoardComponent implements OnInit {
   constructor(private req:RequestsService) { }
 
   ngOnInit() {
-    this.webSocketAPI = new WebSocketAPI(new BoardComponent(this.req));
+    this.webSocketAPI = new WebSocketAPI(this);
     //connect to backend at start
-    this.connect();
+    //this.connect();
     //create the stage on start
     this.stage = new Konva.Stage({
       container: 'container',
@@ -51,27 +51,18 @@ export class BoardComponent implements OnInit {
     this.webSocketAPI._send(this.name);
   }
 
-  handleMessage(message: string){
-    console.log("handled")
-    this.message = message;
+  handleMessage(message: any){
+    console.log(this.simulating)
+    if(this.simulating){
+      var JSONmessage = JSON.parse(message);
+      console.log(JSONmessage.name);
+      this.updateBoard(JSONmessage);
+    }
   }
   //end of websocket
 /*************************************************************************************************************** */
 
-
-  /**
-   * clears all the board
-   */
-  clearAll(){
-    this.req.clear();
-    this.shapes = [];
-    this.pointers = [];
-    this.layer.destroyChildren();
-    this.numOfQs = 0;
-    this.numOfMs = 0;
-    console.log(this.layer.getChildren());
-    this.add('Q');
-  }
+  /***********************Graph Arrays manipulations******************** */
 
   /**
    * filter shapes array according to given element
@@ -93,12 +84,37 @@ export class BoardComponent implements OnInit {
    */
   getShapeWithTextFromArrayByName(name:string){
     var x = this.shapes.filter(function(element){
-      return element.getShapeWithText().getShape().name() == name;
+      return element.getShape().name() == name;
     });
     return x[0];
   }
 
+  /**********************************************BOARD FUNCTIONS************************************************** */
 
+  /**
+   * starts the simulation
+   */
+  startSimulation(){
+    this.connect();
+    this.simulating = true;
+    this.req.play().subscribe(data=>{
+      console.log(data);
+      //this.simulating = false
+    });
+  }
+
+  /**
+   * clears all the board
+   */
+  clearAll(){
+    this.req.clear();
+    this.shapes = [];
+    this.pointers = [];
+    this.layer.destroyChildren();
+    this.numOfQs = 0;
+    this.numOfMs = 0;
+    this.add('Q');
+  }
   /** Adds either M or Q to the board
    *
    * @param string M | Q
@@ -111,7 +127,6 @@ export class BoardComponent implements OnInit {
     //if M
     if(string == 'M'){
       this.req.addMachine();
-      console.log(this.stage.height())
       console.log("add Ms");
       shape = new Konva.Circle({
         name: 'M'+this.numOfMs.toString(),
@@ -136,8 +151,7 @@ export class BoardComponent implements OnInit {
     }
     //if Q
     else{
-      if(this.numOfQs != 0)
-        this.req.addQueue();
+      this.req.addQueue();
       console.log("addQs");
       shape = new Konva.Rect({
         name:'Q'+this.numOfQs.toString(),
@@ -226,37 +240,21 @@ export class BoardComponent implements OnInit {
             var f = followers.filter(function(element:any){
               return element.getDestination().name().includes('Q');
             });
-
             if(f.length != 0){
               component.Choosing=false
               component.stage.off('click');
               return
             }
-            else if(destination.name().includes('M')){
-              component.Choosing=false
-              component.stage.off('click');
-              return
-            }
           }
-          else{
-            if(destination.name().includes('Q')){
-              component.Choosing=false
-              component.stage.off('click');
-              return
-            }
-          }
-          /////////////////////////////requestLine/////////////////////////////////////////////////////
-          component.req.addArrow(source.name(),destination.name()).subscribe(data =>{
+          component.req.addArrow(source.name(),destination.name()).subscribe(data =>{ // send request
             if(data == false){return;}
             else{
               arrow = new Arrow(source,destination); //create new arrow component
               x.addFollowerOut(arrow);
               y.addFollowerIn(arrow);
               x.playFlashAnimation();
-          //add the arrow to the shapes's arrays
-              component.pointers.push(arrow);
-          //add arrow to the layer to display
-              component.layer.add(arrow.getArrow());
+              component.pointers.push(arrow);    //add the arrow to the shapes's arrays
+              component.layer.add(arrow.getArrow());  //add arrow to the layer to display
             }
           });
         }
@@ -267,4 +265,22 @@ export class BoardComponent implements OnInit {
 
   }
 
+
+  async updateBoard(message:any){
+    if(message.name.includes('M')){
+      var Machine = this.getShapeWithTextFromArrayByName(message.name);
+      if(message.change.includes('flash')){
+        await Machine.playFlashAnimation();
+        Machine.playReverseColorAnimation();
+      }
+      else{
+        Machine.playColorAnimation(message.change);
+      }
+    }
+    else{
+      var Queue = this.getShapeWithTextFromArrayByName(message.name);
+      Queue.updateProductsNumber(message.change)
+    }
+
+  }
 }
