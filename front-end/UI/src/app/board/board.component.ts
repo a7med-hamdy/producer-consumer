@@ -18,6 +18,7 @@ export class BoardComponent implements OnInit {
   numOfMs = 0;
   Choosing = false
   simulating = false
+  wareHouseQueues:any[] = []
   webSocketAPI!: WebSocketAPI;
   message: any;
   name: string = '';
@@ -57,6 +58,13 @@ export class BoardComponent implements OnInit {
       var JSONmessage = JSON.parse(message);
       console.log(JSONmessage.name);
       this.updateBoard(JSONmessage);
+      var sum = 0;
+      for(var i = 0; i < this.wareHouseQueues.length;i++){
+        sum += this.wareHouseQueues[i].getProductsNumber();
+      }
+      if(sum == 15){
+        this.simulating = false;
+      }
     }
   }
   //end of websocket
@@ -95,11 +103,16 @@ export class BoardComponent implements OnInit {
    * starts the simulation
    */
   startSimulation(){
-    this.simulating = true;
-    this.req.play().subscribe(data=>{
-      console.log(data);
-      //this.simulating = false
-    });
+    this.req.validate().subscribe(data =>{
+      if(data == true){
+        this.simulating = data;
+        this.req.play();
+      }
+      else{
+        this.simulating = false;
+      }
+    })
+
   }
 
   /**
@@ -279,7 +292,12 @@ export class BoardComponent implements OnInit {
     }
     else{
       var Queue = this.getShapeWithTextFromArrayByName(message.name);
-      Queue.updateProductsNumber(message.change)
+      if(message.change == 'empty'){
+        this.wareHouseQueues.push(Queue);
+      }
+      else{
+        Queue.updateProductsNumber(message.change);
+      }
     }
 
   }

@@ -91,6 +91,9 @@ export class RequestsService {
 /**************************************************
  * Simulation requests                            *
  **************************************************/
+  validate(){
+    return this.http.post<any>(`${this.url}/validate`, {})
+  }
   // start simulation request
   play(){
     return this.http.post<any>(`${this.url}/play`, {})
