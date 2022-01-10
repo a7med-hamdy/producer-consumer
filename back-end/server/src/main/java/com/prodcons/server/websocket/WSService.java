@@ -20,7 +20,12 @@ public class WSService {
      * @param message
      */
     public static synchronized void notifyFrontend(final String message){
-
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         //send the message to all subscribers
         messagingTemplate.convertAndSend("/topic/board", message);
     }

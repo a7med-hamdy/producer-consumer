@@ -153,7 +153,7 @@ public class Graph {
         }
         for(int i = 0; i < 15; i++)
         {
-            int min=100,max=10000;
+            int min=5000,max=10000;
             int time=(int)Math.floor(Math.random()*(max-min+1)+min);
             this.times.add(time);
             min = 0; max = 6;
