@@ -109,6 +109,14 @@ public class RequestsController {
     @PostMapping("/load")
     public String load()
     {
+        try{
+        this.graph=cTaker.getMemento().getState();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            System.out.println("no available replay");
+            
+        }
         String content = this.graph.getShapes();
         if(content == null)
         {
@@ -118,14 +126,6 @@ public class RequestsController {
     }
     @PostMapping("/replay")
     public void replay(){
-        try{
-        this.graph=cTaker.getMemento().getState();
-        }
-        catch(IndexOutOfBoundsException e)
-        {
-            System.out.println("no available replay");
-            return;
-        }
         this.graph.replay();
     }
 }
