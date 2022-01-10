@@ -64,7 +64,7 @@ export class BoardComponent implements OnInit {
         sum += this.wareHouseQueues[i].getProductsNumber();
         console.log(sum)
       }
-      if(sum == 1){
+      if(sum == 10){
         this.simulating = false;
         this.afterSim = true;
         sum = 0;
