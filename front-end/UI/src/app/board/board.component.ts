@@ -151,7 +151,8 @@ export class BoardComponent implements OnInit {
     }
     //if Q
     else{
-      this.req.addQueue();
+      if(this.numOfQs!=0)
+        this.req.addQueue();
       console.log("addQs");
       shape = new Konva.Rect({
         name:'Q'+this.numOfQs.toString(),
