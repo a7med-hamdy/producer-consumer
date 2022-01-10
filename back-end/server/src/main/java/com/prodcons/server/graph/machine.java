@@ -64,6 +64,12 @@ public class machine implements vertex, Runnable, observer {
     {
         if(this.t.getState().toString().equalsIgnoreCase("waiting"))
         {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             System.out.println(this.t.getName()+ " is notified");
             synchronized(this.queues)
             {

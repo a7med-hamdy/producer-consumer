@@ -67,7 +67,7 @@ public class RequestsController {
     @GetMapping("/getGraph/{id}")
     public String getGraph(@PathVariable int id){
         try{
-            return this.graph.getGraphJson();
+            return this.graph.getShapes();
         }
         catch(Exception e){
             return "Graph";
@@ -101,17 +101,19 @@ public class RequestsController {
     public boolean validate(){
         return this.graph.valdiateSimulation();
     }
-    
+    @PostMapping("/save")
+    public void save(@RequestParam("shape") String shapes)
+    {
+        this.graph.setShapes(shapes);
+    }
+    @PostMapping("/load")
+    public String load()
+    {
+        return this.graph.getShapes();
+    }
     @PostMapping("/replay")
-    public boolean replay(){
-        try{
-            this.graph=cTaker.getMemento().getState();
-            this.graph.replay();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public void replay(){
+        this.graph=cTaker.getMemento().getState();
+        this.graph.replay();
     }
 }

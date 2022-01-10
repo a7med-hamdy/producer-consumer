@@ -19,6 +19,7 @@ public class Graph {
     private ArrayList<waitingList> queues = new ArrayList<>();
     private ArrayList<Integer> times = new ArrayList<>();
     private ArrayList<Integer> indexes = new ArrayList<>();
+    private String shapes = "";
     public Graph ()
     {
         rootQueue = new waitingList("Q" + this.queues.size());
@@ -222,21 +223,29 @@ public class Graph {
         System.out.println("unexpected Error: machine not found");
         throw new NotFoundException("unexpected Error: machine not found");
     }
-   public void replay(){
-    for(int i = 0; i < 15; i++)
-    {
-        int time= this.times.get(i);
-        int index = this.indexes.get(i);
-        this.indexes.add(index);
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        synchronized(this.rootQueue)
+    public void replay(){
+        for(int i = 0; i < 15; i++)
         {
-            this.rootQueue.add(colors.values()[index].toString());
+            int time= this.times.get(i);
+            int index = this.indexes.get(i);
+            this.indexes.add(index);
+            try {
+                Thread.sleep(time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized(this.rootQueue)
+            {
+                this.rootQueue.add(colors.values()[index].toString());
+            }
         }
-    }
    }
+   public void setShapes(String str)
+   {
+       this.shapes = str;
+   }
+   public String getShapes()
+   {
+       return this.shapes;
+   } 
 }
