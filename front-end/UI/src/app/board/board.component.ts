@@ -285,6 +285,7 @@ export class BoardComponent implements OnInit {
       if(message.change.includes('flash')){
         await Machine.playFlashAnimation();
         Machine.playReverseColorAnimation();
+
       }
       else{
         Machine.playColorAnimation(message.change);
