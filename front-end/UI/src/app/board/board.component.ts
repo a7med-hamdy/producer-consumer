@@ -62,7 +62,7 @@ export class BoardComponent implements OnInit {
       for(var i = 0; i < this.wareHouseQueues.length;i++){
         sum += this.wareHouseQueues[i].getProductsNumber();
       }
-      if(sum == 1){
+      if(sum == 7){
         this.simulating = false;
         console.log(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
         this.req.save(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))

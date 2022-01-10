@@ -64,8 +64,8 @@ public class RequestsController {
 /**************************************************
  * Getting & Deleting requests                    *
  **************************************************/
-    @GetMapping("/getGraph/{id}")
-    public String getGraph(@PathVariable int id){
+    @GetMapping("/getGraph")
+    public String getGraph(){
         try{
             return this.graph.getShapes();
         }
@@ -105,7 +105,6 @@ public class RequestsController {
     public void save(@RequestParam("shape") String shapes)
     {
         this.graph.setShapes(shapes);
-        System.out.println(shapes);
     }
     @PostMapping("/load")
     public String load()
@@ -114,7 +113,13 @@ public class RequestsController {
     }
     @PostMapping("/replay")
     public void replay(){
+        try{
         this.graph=cTaker.getMemento().getState();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            System.out.println("no available replay");
+        }
         this.graph.replay();
     }
 }

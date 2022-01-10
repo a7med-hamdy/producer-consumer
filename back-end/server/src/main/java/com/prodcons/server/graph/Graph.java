@@ -37,7 +37,7 @@ public class Graph {
     }
     //for machine 
     public void addMachine() {
-        int min=5000,max=10000;
+        int min=2000,max=5000;
         int time=(int)Math.floor(Math.random()*(max-min+1)+min);
         machine m = new machine("M" + this.machines.size(),time);
         this.machines.add(m);
@@ -151,9 +151,9 @@ public class Graph {
         {
             m.startMachine();
         }
-        for(int i = 0; i < 15; i++)
+        for(int i = 0; i < 7; i++)
         {
-            int min=1000,max=10000;
+            int min=2000,max=5000;
             int time=(int)Math.floor(Math.random()*(max-min+1)+min);
             this.times.add(time);
             min = 0; max = 6;
@@ -224,7 +224,12 @@ public class Graph {
         throw new NotFoundException("unexpected Error: machine not found");
     }
     public void replay(){
-        for(int i = 0; i < 15; i++)
+        System.out.println("////////////////////////start replay///////////////////////////////");
+        for(waitingList w : this.queues)
+        {
+            w.restartQueue();
+        }
+        for(int i = 0; i < 7; i++)
         {
             int time= this.times.get(i);
             int index = this.indexes.get(i);
