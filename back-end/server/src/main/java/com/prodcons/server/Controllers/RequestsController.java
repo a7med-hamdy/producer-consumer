@@ -18,7 +18,7 @@ public class RequestsController {
     @PostMapping("/+Q")
     public boolean addQueue(){
         try{
-            graph.addQueue();
+            this.graph.addQueue();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class RequestsController {
     @PostMapping("/+M")
     public boolean addMachine(){
         try{
-            graph.addMachine();
+            this.graph.addMachine();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -46,14 +46,19 @@ public class RequestsController {
         @PathVariable("from") String from,
         @PathVariable("to") String to)
     {
+        String str = "";
         try{
-            graph.addEdge(from, to);
+            str = graph.addEdge(from, to);
         }
         catch(Exception e){
             e.printStackTrace();
             return false;
         }
-        return true;
+        if(str.equalsIgnoreCase("success"))
+        {
+            return true;
+        }
+        return false;
     }
 
 /**************************************************
@@ -62,18 +67,17 @@ public class RequestsController {
     @GetMapping("/getGraph/{id}")
     public String getGraph(@PathVariable int id){
         try{
-
+            return this.graph.getGraphJson();
         }
         catch(Exception e){
             return "Graph";
         }
-        return null;
     }
  
     @DeleteMapping("/clear")
     public boolean clearGragh(){
         try{
-            graph=new Graph();
+            this.graph=new Graph();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -89,9 +93,9 @@ public class RequestsController {
     @PostMapping("/play")
     public boolean play(){
         try{
-           graph.startSimulation();
-           origin.setState(graph);
-           cTaker.addMemento(origin.getMemento());
+           this.graph.startSimulation();
+           this.origin.setState(graph);
+           this.cTaker.addMemento(origin.getMemento());
         }
         catch(Exception e){
             e.printStackTrace();
@@ -100,23 +104,11 @@ public class RequestsController {
         return true;
     }
 
-    /* @PostMapping("/stop")
-    public boolean stop(){
-        try{
-            //Stop it :)
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    } */
-
     @PostMapping("/replay")
     public boolean replay(){
         try{
-            graph=cTaker.getMemento().getState();
-            graph.replay();
+            this.graph=cTaker.getMemento().getState();
+            this.graph.replay();
         }
         catch(Exception e){
             e.printStackTrace();

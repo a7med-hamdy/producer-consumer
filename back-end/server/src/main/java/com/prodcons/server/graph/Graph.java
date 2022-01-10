@@ -1,9 +1,11 @@
 package com.prodcons.server.graph;
 
 import java.util.ArrayList;
-
+import java.util.Set;
 
 import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.webjars.NotFoundException;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
@@ -96,7 +98,8 @@ public class Graph {
     }
     public void startSimulation()
     {
-        System.out.println("starting input");
+        // System.out.println("starting input");
+        // synchronized(this.rootQueue){
         // try {
         //     Thread.sleep(20);
         // } catch (InterruptedException e) {
@@ -104,6 +107,8 @@ public class Graph {
         // }
         // this.rootQueue.add("blue");
         // this.rootQueue.add("red");
+        // this.rootQueue.add("cyan");
+        // this.rootQueue.add("black");
         // try {
         //     Thread.sleep(2000);
         // } catch (InterruptedException e) {
@@ -117,12 +122,45 @@ public class Graph {
         // }
         // this.rootQueue.add("green");
         // this.rootQueue.add("yellow");
+        // }
         for(int i = 0; i < 15; i++)
         {
             int min=100,max=10000;
             int time=(int)Math.floor(Math.random()*(max-min+1)+min);
-
+            this.times.add(time);
+            min = 0; max = 6;
+            int index = (int)Math.floor(Math.random()*(max-min+1)+min);
+            this.indexes.add(index);
+            try {
+                Thread.sleep(time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized(this.rootQueue)
+            {
+                this.rootQueue.add(colors.values()[index].toString());
+            }
         }
+    }
+    public String getGraphJson()
+    {
+        JSONArray arr = new JSONArray();
+        Set<vertex> s = this.g.vertexSet();
+        for(vertex v: s)
+        {
+            JSONObject obj = new JSONObject();
+            obj.putOpt("name", v.getName());
+            Set<DefaultEdge> descendants = this.g.outgoingEdgesOf(v);
+            JSONArray to = new JSONArray();
+            for(DefaultEdge descendant : descendants)
+            {
+                to.put(this.g.getEdgeTarget(descendant).getName());
+            }
+            obj.putOpt("to", to);
+            arr.put(obj);
+        }
+        
+        return arr.toString();
     }
     private Pair<waitingList,String> findQueue(String src, String dst) throws NotFoundException
     {
@@ -158,6 +196,20 @@ public class Graph {
         throw new NotFoundException("unexpected Error: machine not found");
     }
    public void replay(){
-
+    for(int i = 0; i < 15; i++)
+    {
+        int time= this.times.get(i);
+        int index = this.indexes.get(i);
+        this.indexes.add(index);
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        synchronized(this.rootQueue)
+        {
+            this.rootQueue.add(colors.values()[index].toString());
+        }
+    }
    }
 }

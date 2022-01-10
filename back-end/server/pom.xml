@@ -69,6 +69,11 @@
 			<artifactId>jgrapht-core</artifactId>
 			<version>1.5.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20211205</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
