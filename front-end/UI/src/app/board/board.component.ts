@@ -62,8 +62,10 @@ export class BoardComponent implements OnInit {
       for(var i = 0; i < this.wareHouseQueues.length;i++){
         sum += this.wareHouseQueues[i].getProductsNumber();
       }
-      if(sum == 15){
+      if(sum == 2){
         this.simulating = false;
+        this.req.save(JSON.stringify(this.shapes))
+
       }
     }
   }
@@ -109,6 +111,7 @@ export class BoardComponent implements OnInit {
         this.req.play().subscribe();
       }
       else{
+
         this.simulating = false;
       }
     })
@@ -207,8 +210,18 @@ export class BoardComponent implements OnInit {
     var BackArrows: any[] = [];
 
     var SwithT = new ShapeWithText(shape,text1,text2,BackArrows,FrontArrows,color,0);
+    console.log(SwithT)
+    var a = JSON.parse(JSON.stringify(SwithT))
+    console.log(a)
+    //var s = new ShapeWithText(Konva.Node.create(JSON.parse(a.shape)),
+   // Konva.Node.create(JSON.parse(a.text1)),
+    //Konva.Node.create(JSON.parse(a.text2)),
+    //a.InArrows,a.OutArrows,a.color,a.Products)
+    //console.log(s);
     this.shapes.push(SwithT);
     this.layer.add(SwithT.getShapeWithText())
+    console.log(JSON.stringify(this.shapes))
+    console.log(JSON.parse(JSON.stringify(this.shapes)))
   }
 
 

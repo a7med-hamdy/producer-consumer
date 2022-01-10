@@ -151,9 +151,9 @@ public class Graph {
         {
             m.startMachine();
         }
-        for(int i = 0; i < 15; i++)
+        for(int i = 0; i < 2; i++)
         {
-            int min=5000,max=10000;
+            int min=1000,max=10000;
             int time=(int)Math.floor(Math.random()*(max-min+1)+min);
             this.times.add(time);
             min = 0; max = 6;
