@@ -18,6 +18,7 @@ export class BoardComponent implements OnInit {
   numOfMs = 0;
   Choosing = false
   simulating = false
+  afterSim = false
   wareHouseQueues:any[] = []
   webSocketAPI!: WebSocketAPI;
   message: any;
@@ -65,6 +66,7 @@ export class BoardComponent implements OnInit {
       }
       if(sum == 1){
         this.simulating = false;
+        this.afterSim = true;
         sum = 0;
         console.log(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
         this.req.save(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
@@ -191,6 +193,7 @@ export class BoardComponent implements OnInit {
     this.numOfQs = 0;
     this.numOfMs = 0;
     this.simulating = false;
+    this.afterSim = false;
     this.Choosing = false;
     this.add('Q');
   }
