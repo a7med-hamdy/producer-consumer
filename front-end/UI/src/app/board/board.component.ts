@@ -61,9 +61,11 @@ export class BoardComponent implements OnInit {
       var sum = 0;
       for(var i = 0; i < this.wareHouseQueues.length;i++){
         sum += this.wareHouseQueues[i].getProductsNumber();
+        console.log(sum)
       }
-      if(sum == 7){
+      if(sum == 1){
         this.simulating = false;
+        sum = 0;
         console.log(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
         this.req.save(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
 
@@ -106,8 +108,16 @@ export class BoardComponent implements OnInit {
    */
   loadBoard(){
     this.req.load().subscribe(data =>{
+      if(data == null){
+        this.simulating = false;
+        console.log(this.simulating)
+        console.log(data)
+        return;
+      }
+      this.simulating = true
       this.shapes = []
       this.pointers = []
+      this.wareHouseQueues = []
       this.layer.destroyChildren()
       console.log(data)
       data[0] = JSON.parse(data[0])
@@ -140,6 +150,7 @@ export class BoardComponent implements OnInit {
         this.layer.add(arrow.getArrow());
       }
     });
+    return 0;
   }
   /**
    * starts the simulation
@@ -151,7 +162,6 @@ export class BoardComponent implements OnInit {
         this.req.play().subscribe();
       }
       else{
-
         this.simulating = false;
       }
     })
@@ -161,16 +171,13 @@ export class BoardComponent implements OnInit {
     try {
       this.loadBoard();
       this.req.replay().subscribe(data =>{
-        this.simulating = true;
+        //this.simulating = true;
       });
 
     } catch (error) {
       this.simulating = false;
 
     }
-
-
-
   }
   /**
    * clears all the board
@@ -179,9 +186,12 @@ export class BoardComponent implements OnInit {
     this.req.clear();
     this.shapes = [];
     this.pointers = [];
+    this.wareHouseQueues = [];
     this.layer.destroyChildren();
     this.numOfQs = 0;
     this.numOfMs = 0;
+    this.simulating = false;
+    this.Choosing = false;
     this.add('Q');
   }
   /** Adds either M or Q to the board

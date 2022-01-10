@@ -151,7 +151,7 @@ public class Graph {
         {
             m.startMachine();
         }
-        for(int i = 0; i < 7; i++)
+        for(int i = 0; i < 1; i++)
         {
             int min=2000,max=5000;
             int time=(int)Math.floor(Math.random()*(max-min+1)+min);
@@ -241,7 +241,7 @@ public class Graph {
         {
             w.restartQueue();
         }
-        for(int i = 0; i < 7; i++)
+        for(int i = 0; i < 1; i++)
         {
             int time= this.times.get(i);
             int index = this.indexes.get(i);
