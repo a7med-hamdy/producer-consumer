@@ -158,11 +158,18 @@ export class BoardComponent implements OnInit {
 
   }
   replaySimulation(){
-    this.loadBoard();
+    try {
+      this.loadBoard();
+      this.req.replay().subscribe(data =>{
+        this.simulating = true;
+      });
 
-    this.req.replay().subscribe(data =>{
-      this.simulating = true;
-    });
+    } catch (error) {
+      this.simulating = false;
+
+    }
+
+
 
   }
   /**
