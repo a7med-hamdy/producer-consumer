@@ -9,7 +9,7 @@ public class careTaker {
         memolist.add(memento);
     }
 
-    public Memento getMemento(){
+    public Memento getMemento() throws IndexOutOfBoundsException{
         int i =this.memolist.size()-1;
         return memolist.get(i);
     }

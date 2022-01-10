@@ -29,6 +29,7 @@ public class ServerApplication {
 		// g.addEdge("Q3", "M3");
 		// g.addEdge("M3", "Q4");
 		// g.startSimulation();
+		// g.replay();
 		
 		// System.out.println(g.getGraphJson());
 
