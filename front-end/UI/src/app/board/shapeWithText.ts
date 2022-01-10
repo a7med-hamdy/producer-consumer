@@ -81,16 +81,16 @@ export class ShapeWithText{
   async playFlashAnimation(){
     this.animator = new Konva.Tween({
       node: this.shape,
-      duration: 0.3,
+      duration: 0.1,
       easing: Konva.Easings.BackEaseInOut,
       fill: 'rgb(255, 255, 255)',
     });
     var component = this
     for(var i = 0; i < 3;i++){
       this.animator.play()
-      await this.sleep(300);
+      await this.sleep(100);
       this.animator.reverse();
-      await this.sleep(300);
+      await this.sleep(100);
     }
   }
   playColorAnimation(color:string){
