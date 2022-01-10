@@ -125,8 +125,8 @@ export class RequestsService {
     return this.http.post<any>(`${this.url}/load`,{})
   }
   // replay a specified simulation request
-  replay(id: number){
-    return this.http.post<any>(`${this.url}/replay/${id}`, {})
+  replay(){
+    return this.http.post<any>(`${this.url}/replay`, {})
     /* this.req.replay(id).subscribe(done => {
       if(done){
         console.log(`Simulation ${id} replayed!!`)

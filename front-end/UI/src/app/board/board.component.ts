@@ -62,9 +62,10 @@ export class BoardComponent implements OnInit {
       for(var i = 0; i < this.wareHouseQueues.length;i++){
         sum += this.wareHouseQueues[i].getProductsNumber();
       }
-      if(sum == 2){
+      if(sum == 1){
         this.simulating = false;
-        this.req.save(JSON.stringify(this.shapes))
+        console.log(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
+        this.req.save(JSON.stringify([JSON.stringify(this.shapes),JSON.stringify(this.pointers)]))
 
       }
     }
@@ -94,13 +95,52 @@ export class BoardComponent implements OnInit {
    */
   getShapeWithTextFromArrayByName(name:string){
     var x = this.shapes.filter(function(element){
-      return element.getShape().name() == name;
+      return element.getShapeWithText().name() == name;
     });
     return x[0];
   }
 
   /**********************************************BOARD FUNCTIONS************************************************** */
+  /**
+   * loads boardfrom backend
+   */
+  loadBoard(){
+    this.req.load().subscribe(data =>{
+      this.shapes = []
+      this.pointers = []
+      this.layer.destroyChildren()
+      console.log(data)
+      data[0] = JSON.parse(data[0])
+      data[1] = JSON.parse(data[1])
+      for(var i = 0 ; i < data[0].length;i++){
+        if(data[0][i].text2 != null){
+          var s = new ShapeWithText(Konva.Node.create(JSON.parse(data[0][i].Group)),
+                                    Konva.Node.create(JSON.parse(data[0][i].text2)),
+                                    data[0][i].InArrows,data[0][i].OutArrows,data[0][i].Color,data[0][i].Products)
+          this.shapes.push(s);
+          this.layer.add(s.getShapeWithText());
+          s.updateProductsNumber(0);
+        }
+        else{
+          var s = new ShapeWithText(Konva.Node.create(JSON.parse(data[0][i].Group)),
+                                    null,
+                                    data[0][i].InArrows,data[0][i].OutArrows,data[0][i].Color,data[0][i].Products)
+          this.shapes.push(s);
+          s.updateProductsNumber(0);
+          this.layer.add(s.getShapeWithText());
+        }
+      }
 
+      for(var i = 0; i < data[1].length;i++){
+        var src = Konva.Node.create(JSON.parse(data[1][i].Source))
+        var dst = Konva.Node.create(JSON.parse(data[1][i].Destination))
+        var arrow = new Arrow(this.getShapeWithTextFromArrayByName(src.name()).getShapeWithText(),
+                    this.getShapeWithTextFromArrayByName(dst.name()).getShapeWithText())
+        this.pointers.push(arrow);
+        this.layer.add(arrow.getArrow());
+      }
+    });
+  }
   /**
    * starts the simulation
    */
@@ -117,7 +157,14 @@ export class BoardComponent implements OnInit {
     })
 
   }
+  replaySimulation(){
+    this.loadBoard();
 
+    this.req.replay().subscribe(data =>{
+      this.simulating = true;
+    });
+
+  }
   /**
    * clears all the board
    */
@@ -139,6 +186,7 @@ export class BoardComponent implements OnInit {
     var text1;
     var text2;
     var color = 'grey';
+    var Group;
     //if M
     if(string == 'M'){
       this.req.addMachine();
@@ -194,6 +242,7 @@ export class BoardComponent implements OnInit {
         text:'Q'+this.numOfQs.toString()
       });
       text2 = new Konva.Text({
+      name:'text2',
         offset:{x:shape.getAttr('offsetX')*1.5,
                 y:shape.getAttr('offsetY')*1.5
         },
@@ -204,24 +253,27 @@ export class BoardComponent implements OnInit {
       fontSize:20,
       text: '0'
     });
+
     this.numOfQs++
     }
+    Group = new Konva.Group({
+      name:shape.name(),
+      draggable: true,
+      x:shape.x(),
+      y:shape.y(),
+      offsetX: shape.x(),
+      offsetY:shape.y()
+    });
+    Group.add(shape)
+    Group.add(text1)
     var FrontArrows: any[] = [];
     var BackArrows: any[] = [];
 
-    var SwithT = new ShapeWithText(shape,text1,text2,BackArrows,FrontArrows,color,0);
+    var SwithT = new ShapeWithText(Group,text2,BackArrows,FrontArrows,color,0);
     console.log(SwithT)
     var a = JSON.parse(JSON.stringify(SwithT))
-    console.log(a)
-    //var s = new ShapeWithText(Konva.Node.create(JSON.parse(a.shape)),
-   // Konva.Node.create(JSON.parse(a.text1)),
-    //Konva.Node.create(JSON.parse(a.text2)),
-    //a.InArrows,a.OutArrows,a.color,a.Products)
-    //console.log(s);
     this.shapes.push(SwithT);
     this.layer.add(SwithT.getShapeWithText())
-    console.log(JSON.stringify(this.shapes))
-    console.log(JSON.parse(JSON.stringify(this.shapes)))
   }
 
 
@@ -281,6 +333,7 @@ export class BoardComponent implements OnInit {
               x.playFlashAnimation();
               component.pointers.push(arrow);    //add the arrow to the shapes's arrays
               component.layer.add(arrow.getArrow());  //add arrow to the layer to display
+              console.log(JSON.parse(JSON.stringify(component.pointers)))
             }
           });
         }

@@ -1,8 +1,5 @@
 import Konva from 'konva'
-import { delay } from 'rxjs';
 export class ShapeWithText{
-  shape!:Konva.Shape;
-  text1!:Konva.Text;
   text2!:Konva.Text;
   Group!:Konva.Group;
   animator!:Konva.Tween;
@@ -13,43 +10,39 @@ export class ShapeWithText{
 
   /**
    *
-   * @param shape shape Rectangle or Circle
-   * @param text  Text to be put on the Rectangle
+   * @param Group shape Rectangle or Circle
+   * @param text2  Text to be put on the Rectangle
    * @param InArrows Arrows pointing towards the shape
    * @param OutArrows Arrows pointing out of theshape
    * @param Color Original Color of the shape
    */
-  constructor(shape:Konva.Shape,
-              text1:Konva.Text,
-              text2:any = null,
+  constructor(Group:Konva.Group,
+              text2:any =null,
               InArrows:any[],
               OutArrows:any[],
               Color:string,
               Products:number)
     {
-    this.shape = shape
-    this.text1 = text1
-    this.text2 = text2
+    this.Group =Group;
+    if(this.Group.find('.text2').length == 0){
+      if(text2 != null){
+      this.text2 = text2;
+      this.Group.add(this.text2);
+    }
+    }
+    else{
+      console.log(this.Group.find('.text2'));
+      text2 = this.Group.find('.text2')[0]
+      this.text2 = text2;
+    }
     this.InArrows = InArrows;
     this.OutArrows = OutArrows;
     this.Color = Color;
     this.Products = Products;
-    this.Group = new Konva.Group({
-      name:this.shape.name(),
-      draggable: true,
-      x:this.shape.x(),
-      y:this.shape.y(),
-      offsetX:this.shape.x(),
-      offsetY:this.shape.y()
-    });
-    this.Group.add(this.shape);
-    this.Group.add(this.text1);
-    if(this.text2 != null)
-      this.Group.add(this.text2);
+
   }
 
   getShapeWithText(){return this.Group;}
-  getShape(){return this.shape}
   getProductsNumber(){return this.Products;}
   getFollowersOut(){return this.OutArrows;}
   getFollowersIn(){return this.InArrows;}
@@ -80,7 +73,7 @@ export class ShapeWithText{
   }
   async playFlashAnimation(){
     this.animator = new Konva.Tween({
-      node: this.shape,
+      node: this.Group.find('.'+this.Group.name())[0],
       duration: 0.1,
       easing: Konva.Easings.BackEaseInOut,
       fill: 'rgb(255, 255, 255)',
@@ -95,7 +88,7 @@ export class ShapeWithText{
   }
   playColorAnimation(color:string){
     this.animator = new Konva.Tween({
-      node: this.shape,
+      node: this.Group.find('.'+this.Group.name())[0],
       duration: 0.3,
       easing: Konva.Easings.BackEaseInOut,
       fill: color,

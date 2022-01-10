@@ -20,7 +20,7 @@
       <div class = "button-text">⌧</div>
     </button>
 
-    <button [disabled]="Choosing ||simulating">
+    <button [disabled]="Choosing ||simulating" (click)="replaySimulation()">
       <div title="Replay Previous Simulation" class = "button-text">⟳</div>
     </button>
 
