@@ -142,8 +142,9 @@ public class Graph {
                 System.out.println(w.name);
                 obj.putOpt("name", w.name);
 		        obj.putOpt("change", "empty"); 
+                WSService.notifyFrontend(obj.toString());
+                System.out.println(obj.toString());
             }
-            WSService.notifyFrontend(obj.toString());
         }
         for(machine m : machines)
         {
