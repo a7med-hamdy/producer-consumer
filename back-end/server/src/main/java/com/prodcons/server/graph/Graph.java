@@ -139,12 +139,14 @@ public class Graph {
             JSONObject obj = new JSONObject();
             if(w.getSubscribersNumber() == 0)
             {
+                WSService.notifyFrontend(obj.toString());
                 System.out.println(w.name);
                 obj.putOpt("name", w.name);
 		        obj.putOpt("change", "empty"); 
                 WSService.notifyFrontend(obj.toString());
                 System.out.println(obj.toString());
             }
+            
         }
         for(machine m : machines)
         {

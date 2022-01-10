@@ -105,8 +105,8 @@ export class BoardComponent implements OnInit {
   startSimulation(){
     this.req.validate().subscribe(data =>{
       if(data == true){
-        this.simulating = data;
-        this.req.play();
+        this.simulating = true;
+        this.req.play().subscribe();
       }
       else{
         this.simulating = false;
