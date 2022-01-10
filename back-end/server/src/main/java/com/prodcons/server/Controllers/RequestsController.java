@@ -105,7 +105,6 @@ public class RequestsController {
     public void save(@RequestParam("shape") String shapes)
     {
         this.graph.setShapes(shapes);
-        System.out.println(shapes);
     }
     @PostMapping("/load")
     public String load()

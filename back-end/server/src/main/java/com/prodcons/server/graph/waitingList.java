@@ -19,6 +19,13 @@ public class waitingList implements vertex{
         this.name = name;
     }
     public waitingList(){}
+    public void restartQueue()
+    {
+        while(!this.list.isEmpty())
+        {
+            this.list.poll();
+        }
+    }
     public int getSubscribersNumber()
     {
         return this.subscribers.size();
