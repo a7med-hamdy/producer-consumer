@@ -3,6 +3,8 @@ package com.prodcons.server.graph;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.prodcons.server.websocket.WSService;
+
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -123,10 +125,29 @@ public class Graph {
         // this.rootQueue.add("green");
         // this.rootQueue.add("yellow");
         // }
+        
+        JSONArray arr = new JSONArray();
+        for(waitingList w : queues)
+        {
+            JSONObject obj = new JSONObject();
+            if(w.getSubscribersNumber() == 0)
+            {
+                System.out.println(w.name);
+                obj.putOpt("name", w.name);
+		        obj.putOpt("change", "empty"); 
+                arr.put(obj);
+            }
+        }
+        System.out.println(arr.toString());
+        WSService.notifyFrontend(arr.toString());
+
         for(machine m : machines)
         {
             m.startMachine();
         }
+        
+        
+
         for(int i = 0; i < 15; i++)
         {
             int min=100,max=10000;

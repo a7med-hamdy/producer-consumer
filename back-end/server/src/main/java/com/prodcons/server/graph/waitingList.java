@@ -19,7 +19,10 @@ public class waitingList implements vertex{
         this.name = name;
     }
     public waitingList(){}
-
+    public int getSubscribersNumber()
+    {
+        return this.subscribers.size();
+    }
     public void Notify()
     {
         Iterator<observer> i = this.subscribers.iterator();
