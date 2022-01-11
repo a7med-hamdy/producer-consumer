@@ -23,12 +23,11 @@ public class WSService {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //send the message to all subscribers
         try {
-            Thread.sleep(250);
+            Thread.sleep(250);//the sleep is to sync with the front
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

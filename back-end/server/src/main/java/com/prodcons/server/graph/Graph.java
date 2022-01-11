@@ -17,7 +17,9 @@ public class Graph {
     private ArrayList<machine> machines = new ArrayList<>();
     private waitingList rootQueue;
     private ArrayList<waitingList> queues = new ArrayList<>();
+    //list of the times between each product (used in replays)
     private ArrayList<Integer> times = new ArrayList<>();
+    //list of the colors used in the simulation (used in replays)
     private ArrayList<Integer> indexes = new ArrayList<>();
     private String shapes = "";
     public Graph ()
@@ -26,6 +28,7 @@ public class Graph {
         this.queues.add(rootQueue);
         this.g.addVertex(rootQueue);
     }
+    // the colors available to be used
     enum colors{
         red,
         blue,
@@ -50,7 +53,7 @@ public class Graph {
         this.queues.add(q);
         this.g.addVertex(q);
     }
-    //add edges (arrows)
+    //add edges (arrows) and validate the operations
     public String addEdge(String src, String dst)
     {
         Pair<machine,String> found = new Pair<machine,String>(new machine(), "");
@@ -99,6 +102,10 @@ public class Graph {
         }
         return "success";
     }
+    /**
+     * validate that for every machine there's a queue after
+     * @return
+     */
     public boolean valdiateSimulation()
     {
         for (machine m : machines)
@@ -107,39 +114,17 @@ public class Graph {
         }
         return true;
     }
+    /**
+     * start the simulation
+     */
     public void startSimulation()
     {
-        // System.out.println("starting input");
-        // synchronized(this.rootQueue){
-        // try {
-        //     Thread.sleep(20);
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
-        // this.rootQueue.add("blue");
-        // this.rootQueue.add("red");
-        // this.rootQueue.add("cyan");
-        // this.rootQueue.add("black");
-        // try {
-        //     Thread.sleep(2000);
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
-        // this.rootQueue.add("violet");
-        // try {
-        //     Thread.sleep(1500);
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
-        // this.rootQueue.add("green");
-        // this.rootQueue.add("yellow");
-        // }
-       
         for(waitingList w : queues)
         {
             JSONObject obj = new JSONObject();
             if(w.getSubscribersNumber() == 0)
             {
+                //notify the front-end with the last queues
                 System.out.println(w.name);
                 obj.putOpt("name", w.name);
 		        obj.putOpt("change", "empty"); 
@@ -147,10 +132,12 @@ public class Graph {
             }
             
         }
+        //start every machine
         for(machine m : machines)
         {
             m.startMachine();
         }
+        //start the input
         for(int i = 0; i < 10; i++)
         {
             int min=2000,max=5000;
@@ -170,6 +157,7 @@ public class Graph {
             }
         }
     }
+    //cobvert the graph to json
     public String getGraphJson()
     {
         JSONArray arr = new JSONArray();
@@ -190,6 +178,7 @@ public class Graph {
         
         return arr.toString();
     }
+    //helper method to add edges
     private Pair<waitingList,String> findQueue(String src, String dst) throws NotFoundException
     {
         for(waitingList w : this.queues)
@@ -206,7 +195,7 @@ public class Graph {
         System.out.println("unexpected Error: machine not found");
         throw new NotFoundException("unexpected Error: queue not found");
     }
-
+    //helper method to add edges
     private Pair<machine,String> findMachine(String src, String dst) throws NotFoundException
     {
         for(machine m : this.machines)
@@ -223,6 +212,7 @@ public class Graph {
         System.out.println("unexpected Error: machine not found");
         throw new NotFoundException("unexpected Error: machine not found");
     }
+    //start replay
     public void replay(){
         System.out.println("////////////////////////start replay///////////////////////////////");
         for(waitingList w : queues)
@@ -237,10 +227,12 @@ public class Graph {
             }
             
         }
+        //empty the queues
         for(waitingList w : this.queues)
         {
             w.restartQueue();
         }
+        //start the input and this time used the same color and input rate used in the fisrt simulation
         for(int i = 0; i < 10; i++)
         {
             int time= this.times.get(i);
@@ -257,10 +249,12 @@ public class Graph {
             }
         }
    }
+   //set the incoming shapes from the frontend
    public void setShapes(String str)
    {
        this.shapes = str;
    }
+   //return the shapes to be used by the frontend
    public String getShapes()
    {
        return this.shapes;
